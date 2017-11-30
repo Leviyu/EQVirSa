@@ -1,0 +1,11 @@
+#!/bin/tcsh 
+
+# get the EQ data from soduser
+
+set PWD = `pwd`
+set sac = $1
+
+cp ~/Downloads/$sac .
+exit 0
+
+

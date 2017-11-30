@@ -1,0 +1,10 @@
+#!/bin/tcsh
+
+
+<PHASE>			ScS
+<DISTMIN>		70 
+<DISTMAX>		71
+#<LAT_MIN_MAX>	-40 5
+#<LON_MIN_MAX>	150 180
+
+

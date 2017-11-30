@@ -1,0 +1,16 @@
+#!/bin/tcsh
+
+
+set BIG_EVENTINFO = $1
+set EQ_NAME = $2
+set STA = $3
+set PHASE = $4
+
+
+
+
+
+
+
+cat $BIG_EVENTINFO |awk  '{if($12 == '$EQ_NAME' && $1 == '$STA' && $20 == '$PHASE' ) print 1;else print 0}' >! sqlcommand.result
+

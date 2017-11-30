@@ -1,0 +1,52 @@
+#!/bin/tcsh
+
+
+
+
+
+
+
+
+### This is the directory information 
+<CURRENT_DIR>			/Users/Leviyu/Hongyu/github/Virtual_Station
+<WORKDIR>	/Users/Leviyu/Hongyu/github/Virtual_Station/WORKDIR
+<PLOTDIR>	/Users/Leviyu/Hongyu/github/Virtual_Station/PLOTDIR
+<MODEL_DIR>				/home/hongyu_ubuntu/Archive/006_tomography_models
+<TAUP_PATH_DIR>			TAUP_PATH_DIR
+<CPP_LAB>				/Users/Leviyu/Hongyu/github/Maligaro/cpp_lib
+<SRCDIR>	/Users/Leviyu/Hongyu/github/Virtual_Station/code_dir
+<C_DIR>					/Users/Leviyu/Hongyu/github/Maligaro/cpp_lib
+### Directory information end here
+
+
+
+<PHASE_LIST> 			 S
+<PHASE_LONG_WIN_BEG>	-100
+<PHASE_LONG_WIN_LEN>	200
+<PHASE_WIN_BEG>			-10
+<PHASE_WIN_LEN>			30
+<PHASE_NOISE_BEG>		-100
+<PHASE_NOISE_LEN>		80
+<DELTA>					0.1
+
+
+## Define virtual station network setup
+# VS -> Virtual Station
+<VS_LATITUDE_INC>		3		# in degree
+<VS_LONGITUDE_INC>		NON     # this is calcuated to match the distance in degree 
+								# for latitude increment 1degree = 110km here
+<VS_EQ_RADIUS>				3		# degree, 1degree ~ 110km
+<VS_STA_RADIUS>				3		# degree, 1degree ~ 110km
+<VS_EXISTING_RECORD_NUM_THRESHOLD>	5	# if we have more then 5 record for a give EQ-STA grid pair
+										# in eventinfo
+										# then we dont stack
+<VS_RECORD_NUM_THRESHOLD>			2	# only when we have more then 10 records for currenet 
+										# EQ-STA grid pair in eventStation
+										# then we stack
+<eventinfo_max_threshold>			5	# for each EQ_grid/STA_grid/PHASE, if we have more then this number 
+										# of good records from eventinfo, then we skip making virtual station
+<eventStation_min_threshold>		3	# for each EQ_grid/STA_grid/PHASE, if we have less then this number
+										# of possible records, then we skip making virtual station
+
+#other
+<EXISTING_EVENTINFO>	/Users/Leviyu/Hongyu/github/Virtual_Station/eventinfo
