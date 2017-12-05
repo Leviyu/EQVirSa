@@ -37,13 +37,13 @@ set DATADIR =					`grep -w WORKDIR $INFILE | awk '{print $2}'`
 set PLOTDIR =					`grep -w PLOTDIR $INFILE | awk 'NR==1 {print $2}'`
 set C_DIR =						`grep -w C_DIR $INFILE | awk '{print $2}'`
 set TAUP_DIR =					`grep -w TAUP_DIR $INFILE | awk '{print $2}'`
-set SHELL_DIR =					`grep -w SHELL_DIR $INFILE | awk '{print $2}'`
+set SHELL_DIR =					`grep -w SRCDIR $INFILE | awk '{print $2}'`
 
 
 set DATADIR = $DATADIR/$ID
 set PLOTDIR = $PLOTDIR/$ID
-rm $DATADIR
-rm $PLOTDIR
+#rm $DATADIR
+#rm $PLOTDIR
 echo "DATADIR is $DATADIR"
 mkdir -p $DATADIR 
 mkdir -p $PLOTDIR
@@ -58,14 +58,17 @@ set EQ_LIST = $DATADIR/INPUT_EQ_LIST
 cd $C_DIR/virtual_station/
 make
 cd -
-##cp $C_DIR $WORKDIR/$ID/ -r 
-##set C_DIR = $WORKDIR/$ID/cpp_lib/virtual_station
 
-##foreach EQ (`cat $EQ_LIST`)
-set INP = ( $PWD $DATADIR $PLOTDIR $EQ $C_DIR $SHELL_DIR $ID $DIR)
+set EQ_PHASE_LIST = `grep -w PHASE_LIST $INFILE | awk 'NR==1 {print $0}' |cut -f2-`
+foreach PHASE (`echo $EQ_PHASE_LIST`)
+set EQ = ${ID}_${PHASE}
+
+set INP = ( $PWD $DATADIR $PLOTDIR $EQ $C_DIR $SHELL_DIR $ID $DIR $PHASE)
 echo "---> Working on $ID $EQ "
-##csh $PWD/work.sh $INP > & $PWD/LOG/logfile.${ID}.${EQ} 
+echo $INP
+#csh $PWD/work.sh $INP > & $PWD/LOG/logfile.${ID}.${PHASE} &
 csh $PWD/work.sh $INP 
-##sleep 2h
-##end #EQ
+#sleep 2s
+
+end # PHASE
 

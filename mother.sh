@@ -16,7 +16,7 @@ cat /dev/null >! $new_file
 cp $old_file $new_file
 set bigdir = `cat $old_file|grep CURRENT_DIR|awk '{print $2}'`
 
-foreach NAME ( WORKDIR PLOTDIR SRCDIR EXISTING_EVENTINFO )
+foreach NAME ( WORKDIR PLOTDIR SRCDIR EXISTING_EVENTINFO CPP_LAB C_DIR)
 	set full_name = "<${NAME}>"
 	set name_content = `cat $old_file |grep $NAME |awk 'NR==1 {print $2}'`
 	set new_name = "<${NAME}>	$bigdir/$name_content"

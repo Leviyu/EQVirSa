@@ -13,6 +13,12 @@ set EQ = $3
 set WORKDIR = $4
 set PLOTDIR = $5
 set PWD = $6
+set SRCDIR = $PWD/code_dir
+#//echo $ID 
 
-csh $PWD/code_dir/c01.plot_virsual_station_stack.sh $WORKDIR $PLOTDIR $ID $PWD $PHASE $EQ
 
+
+
+csh $PWD/code_dir/c01.plot_virsual_station_stack.sh $WORKDIR $PLOTDIR $ID $PWD $PHASE $EQ $SRCDIR
+
+to_hongyu $PLOTDIR

@@ -8,12 +8,12 @@
 # Get input information
 
 set PWD = `pwd`
-set ID = T1
-set PHASE = S
+set ID = T11_big
+set PHASE = ScS
 set EQ = $ID
-set WORKDIR = $PWD/WORKDIR
-set PLOTDIR = $PWD/PLOTDIR
+set WORKDIR = $PWD/WORKDIR/$ID/$ID
+set PLOTDIR = $PWD/PLOTDIR/$ID
 set SRCDIR = $PWD/code_dir
 
-csh $PWD/code_dir/c01.plot_virsual_station_stack.sh $WORKDIR/$ID/$ID $PLOTDIR $ID $PWD $PHASE $EQ $SRCDIR
+csh $PWD/code_dir/c01.plot_virsual_station_stack.sh $WORKDIR $PLOTDIR $ID $PWD $PHASE $EQ $SRCDIR
 
