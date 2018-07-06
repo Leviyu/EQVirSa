@@ -3,14 +3,15 @@
 
 set ID = $1
 if($ID == "" || $ID == " ") then
+	echo "--> Input ID please"
 exit 0
 endif
 
 set PWD = `pwd`
 
 # Construct INFILE from INFILE.mother
-set old_file = $PWD/.INFILE
-set new_file = $PWD/INFILE
+set old_file = $PWD/INFILE
+set new_file = $PWD/WORKDIR/INFILE
 cat /dev/null >! $new_file
 
 cp $old_file $new_file
@@ -24,11 +25,12 @@ foreach NAME ( WORKDIR PLOTDIR SRCDIR EXISTING_EVENTINFO CPP_LAB C_DIR)
 end
 
 
-set WORKDIR = `cat $PWD/INFILE |grep WORKDIR |awk 'NR==1 {print $2}'`
-
+set WORKDIR = `cat $new_file |grep WORKDIR |awk 'NR==1 {print $2}'`
+echo "WORKDIR is $WORKDIR"
 
 echo "--> Run_work.sh"
-csh run_work.sh $ID $WORKDIR $PWD
+
+csh $PWD/code_dir/run_work.sh $ID $WORKDIR $PWD
 
 ##cat $PWD/LOG/logfile.${ID}.*
 ##get_virtual_station

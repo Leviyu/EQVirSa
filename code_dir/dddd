@@ -1,0 +1,7 @@
+cat<< EOF >> $macro
+r $sod_sac
+interpolate delta $delta
+dif
+$filter
+write $sac_file
+EOF

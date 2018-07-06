@@ -215,23 +215,41 @@ EOF
 ## ================================================
 
 ## add the rest of the station on it
-echo "--> Add rest of stations"
-set eventinfo = $WORKDIR/eventStation
-foreach other_sta (`cat $eventinfo |awk '{print $1}'`)
- 	set TMP = `grep -w $other_sta $eventinfo|awk 'NR==1 {print $0}'`
- 	set sta_lat_tmp = $TMP[9]
- 	set sta_lon_tmp = $TMP[10]
- 	set flag1 = `cat $record_list_file |grep -w $other_sta |awk 'NR==1 {print $1}' `
- 	set star_color = blue
- 	if( $flag1 != "") then
- 		set star_color = red
- 	endif
-
-psxy   $REG $PROJ -Sa0.2  -G${star_color} -O  -K ${LOC}<<EOF >> $OUT
-$sta_lon_tmp $sta_lat_tmp
+echo "--> Add rest of stations/events"
+set rest_sta = $WORKDIR/rest.sta.$$
+cat /dev/null >! $rest_sta
+cat $WORKDIR/eventStation |awk '{print $1,$9,$10}' |sort -u -k1,1 | \
+	awk 'function abs(x){return ((x < 0.0) ? -x : x)} { if( abs($2 - '$sta_lat') < 30 && abs($3 - '$sta_lon' < 30)) print $3,$2,$1}' > $rest_sta
+set star_color = blue
+psxy  $rest_sta  $REG $PROJ -Sa0.2  -G${star_color} -O  -K ${LOC}<<EOF >> $OUT
 EOF
-end
 
+## plot record witin range as red
+set record_in_range = $WORKDIR/records_in_range.$$
+cat /dev/null>! $record_in_range
+foreach mysta (`cat $record_list_file|awk -F"." '{print $3}'`)
+	set TT = `cat $WORKDIR/eventStation |grep -w $mysta |awk 'NR==1 {print $0}'`
+	set mysta_lat = $TT[9]
+	set mysta_lon = $TT[10]
+	set star_color = red
+
+psxy    $REG $PROJ -Sa0.2  -G${star_color} -O  -K ${LOC}<<EOF >> $OUT
+$mysta_lon $mysta_lat
+EOF
+end #mysta
+
+# add events location
+set rest_eq = $WORKDIR/rest.eq.$$
+cat /dev/null >! $rest_eq
+cat $WORKDIR/eventStation |awk '{print $19,$11,$12}' |sort -u -k1,1 |\
+	awk 'function abs(x){return ((x < 0.0) ? -x : x)} { if( abs($2 - '$eq_lat') < 30 && abs($3 - '$eq_lon' < 30)) print $3,$2}' > $rest_eq
+set star_color = red
+psxy  $rest_eq  $REG $PROJ -Sa0.2  -G${star_color} -O  -K ${LOC}<<EOF >> $OUT
+EOF
+set star_color = blue
+psxy    $REG $PROJ -Sa0.2  -G${star_color} -O  -K ${LOC}<<EOF >> $OUT
+$eq_lon $eq_lat
+EOF
 
 ## add some description
 set LOC = "-Xa3i -Ya0.5i"

@@ -1,0 +1,5 @@
+#!/bin/tcsh
+
+csh ~/bin/make_polar $1 $2 $3 $4 > tmp.polar
+
+

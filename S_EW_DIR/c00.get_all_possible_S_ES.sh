@@ -18,13 +18,17 @@ foreach job (`echo $possible_job_name`)
 	set possible_dir = /mnt/data2/hongyu/git_lib/DATADIR/$job/$EQ/S_ES.third.out
 	set new_name = S_ES.${EQ}
 
-	if( -e $new_name) then
-		continue
+	#if( -e $new_name) then
+		#continue
+		#endif
+	
+	if( ! -e $possible_dir ) then
+	continue
 	endif
 
 
 	#echo $possible_dir
-	geteq $possible_dir > & /dev/null
+	cp $possible_dir . > & /dev/null
 	if(! -e ./S_ES.third.out ) then
 		continue
 	endif

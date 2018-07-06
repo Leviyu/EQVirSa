@@ -1,0 +1,70 @@
+#!/bin/tcsh
+
+
+
+
+
+
+
+
+### This is the directory information 
+<CURRENT_DIR>			/mnt/data2/hongyu/EQVirSa
+<WORKDIR>				WORKDIR
+<PLOTDIR>				PLOTDIR
+<MODEL_DIR>				/home/hongyu_ubuntu/Archive/006_tomography_models
+<TAUP_PATH_DIR>			TAUP_PATH_DIR
+<CPP_LAB>				Maligaro/cpp_lib
+<SRCDIR>				code_dir
+<C_DIR>					Maligaro/cpp_lib
+### Directory information end here
+
+
+<PHASE_LIST>			S
+#<PHASE_LIST>			 ScSScS ScSScSScS ScSScSScSm SSSS SSSSm SSS SSSm SSSSS SSSSSm
+#<PHASE_LIST>			S ScS
+#<KKPHASE_LIST> 			ScSScSScS ScSScSScSm ScSScSScSScSm ScSScSScSScS SSS SSSm SSSS SSSSm 
+#<KKPHASE_LIST>	S ScS ScSScS SS SSS ScSScS
+<PHASE_LONG_WIN_BEG>	-100
+<PHASE_LONG_WIN_LEN>	200
+<PHASE_WIN_BEG>			-10
+<PHASE_WIN_LEN>			30
+<PHASE_NOISE_BEG>		-100
+<PHASE_NOISE_LEN>		80
+<DELTA>					0.1
+
+<S_ES_DIR>				/mnt/data2/hongyu/Catalog_Plots/mother_dir/C01_make_eventinfo/eventinfo_dir/S_ES_DIR_all
+
+## Define virtual station network setup
+# VS -> Virtual Station
+<VS_LATITUDE_INC>		3		# in degree
+#<VS_LATITUDE_INC>		3		# in degree
+#<VS_LONGITUDE_INC>		NON     # this is calcuated to match the distance in degree 
+<VS_LONGITUDE_INC>		NON     # this is calcuated to match the distance in degree 
+								# for latitude increment 1degree = 110km here
+<VS_EQ_RADIUS>				1.5			# degree, 1degree ~ 110km
+#<VS_EQ_RADIUS>				1.5			# degree, 1degree ~ 110km
+#<VS_STA_RADIUS>				1.5		# degree, 1degree ~ 110km
+<VS_STA_RADIUS>				1.5		# degree, 1degree ~ 110km
+<eventinfo_max_threshold>			5	# for each EQ_grid/STA_grid/PHASE, if we have more then this number 
+										# of good records from eventinfo, then we skip making virtual station
+<eventStation_min_threshold>		8	# for each EQ_grid/STA_grid/PHASE, if we have less then this number
+										# of possible records, then we skip making virtual station
+#<VS_EXISTING_RECORD_NUM_THRESHOLD>	6	# if we have more then 5 record for a give EQ-STA grid pair
+										# in eventinfo
+										# then we dont stack	
+#<VS_RECORD_NUM_THRESHOLD>			6	# only when we have more then 10 records for currenet 
+										# EQ-STA grid pair in eventStation
+										# then we stack
+
+
+#other
+<EXISTING_EVENTINFO>	eventinfo
+
+
+<FILTER_FLAG>		bp co 0.01 0.1 n 2 p 2
+
+
+
+<SNR_CUT>		2.0
+<CCC_CUT>		0.85
+
