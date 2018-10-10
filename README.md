@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/Leviyu/EQTime/blob/master/image/header.png"><br><br>
+  <img src="https://github.com/Leviyu/EQVirSa/blob/master/img/EQVirSa.jpg"><br><br>
 </div>
 
 # EQVirSa
