@@ -10,6 +10,9 @@ set PHASE = $2
 set sod_sac = $3
 
 set INFILE = ./INFILE
+if( -e $sac_file ) then
+exit 0
+endif
 
 set delta = `cat $INFILE |grep -w DELTA |awk '{print $2}'`
 
@@ -26,58 +29,81 @@ cat /dev/null >! $macro
 if( $PHASE == "SS" || $PHASE == "SSm") then
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 hilbert
 write $sac_file
+q
 EOF
 else if( $PHASE == "S3" || $PHASE == "S3m" ) then
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 mul -1
 write $sac_file
+q
 EOF
 else if( $PHASE == "S4" || $PHASE == "S4m" ) then
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 mul -1
 hilbert
 write $sac_file
+q
 EOF
 else if( $PHASE == "S5" || $PHASE == "S5m" ) then
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 write $sac_file
+q
 EOF
 else if( $PHASE == "S6" || $PHASE == "S6m"  ) then
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 hilbert
 write $sac_file
+q
 EOF
 else
 cat<< EOF >> $macro
 r $sod_sac
+rtr
+rmean
 interpolate delta $delta
 dif
 $filter
 write $sac_file
+q
 EOF
 
 endif
+
+
+
 sac < $macro > & /dev/null
+
+
 
 exit 0

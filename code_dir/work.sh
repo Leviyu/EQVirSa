@@ -50,6 +50,8 @@ cp $PWD/code_dir/c04.plot_VS_for_current_VS.sh .
 cp $PWD/code_dir/c05.run_c04_in_background.sh .
 cp $PWD/code_dir/make_polar .
 cp $PWD/code_dir/c06.record_filter_and_resample.sh .
+cp $PWD/code_dir/unique_station.list .
+#//cp $PWD/code_dir/list.unique_EQ .
 
 ##cp eventStation.${EQ} eventStation
 # creat EQ_LIST and STA_LIST
@@ -68,7 +70,7 @@ EOF
 
 echo "***Empirical Wavelet Algorithm Ending for $EQ   PHASE: $PHASE **********`date`"
 echo "============================================================================="
-csh $PWD/code_dir/plot.sh $ID $PHASE $EQ $DATADIR $PLOTDIR  $PWD 
+#csh $PWD/code_dir/plot.sh $ID $PHASE $EQ $DATADIR $PLOTDIR  $PWD 
 
 exit 0
 

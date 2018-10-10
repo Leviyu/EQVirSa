@@ -42,7 +42,7 @@ set SHELL_DIR =					`grep -w SRCDIR $INFILE | awk '{print $2}'`
 
 set DATADIR = $DATADIR/$ID
 set PLOTDIR = $PLOTDIR/$ID
-/bin/rm -rf $DATADIR
+#//bin/rm -rf $DATADIR
 mkdir -p $DATADIR 
 mkdir -p $PLOTDIR
 cp $PWD/CMT.data $DATADIR/
@@ -65,7 +65,7 @@ foreach PHASE (`echo $EQ_PHASE_LIST`)
 	set INP = ( $PWD $DATADIR $PLOTDIR $EQ $C_DIR $SHELL_DIR $ID $DIR $PHASE )
 	echo "---> Working on $ID $EQ"
 	csh $PWD/code_dir/work.sh $INP > & $PWD/LOG/logfile.${ID}.${PHASE} &
-	sleep 1s
+	sleep 3s
 
 end # PHASE
 

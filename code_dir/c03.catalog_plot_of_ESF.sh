@@ -50,9 +50,10 @@ set VS_FILE = $work_dir/out.station_stack.info.${PHASE}.${current_EQ}.tmp
 # by each event
 # 1. good record by distance
 # 2. bad record by distance
-cat /dev/null >! $VS_FILE
-cat $VS_FILE_orig |grep -w $EQ |awk '$16==1 {print $0}'|sort -n -k 10 |uniq -f 1 >> $VS_FILE
-cat $VS_FILE_orig |grep -w $EQ |awk '$16!=1 {print $0}'|sort -n -k 10 |uniq -f 1 >> $VS_FILE
+#cat /dev/null >! $VS_FILE
+#cat $VS_FILE_orig |grep -w $EQ |awk '$16==1 {print $0}'|sort -n -k 10 |uniq -f 1 >> $VS_FILE
+#cat $VS_FILE_orig |grep -w $EQ |awk '$16!=1 {print $0}'|sort -n -k 10 |uniq -f 1 >> $VS_FILE
+cp $VS_FILE_orig $VS_FILE
 
 
 set COMP = T
@@ -91,14 +92,14 @@ set arrow_parameter = "-Svh0.005i/0.08i/0.01i"
 # 	plot record one by one
 # ====================================================
 set record_num = `cat $VS_FILE |wc -l`
+set EQ_mag = `check_event $current_EQ |grep -w EQ_MAG |awk '{print $2}'`
 foreach ivs (`cat $VS_FILE |awk '{print $1}'`)
+echo "---> Working on ivs $ivs / $record_num"
 set TMP = `cat $VS_FILE|awk -v dd=$ivs '$1==dd {print $0}'`
 set EQ = $TMP[2]
 set EQ_lat = $TMP[3]
 set EQ_lon = $TMP[4]
 set EQ_RAD = $TMP[5]
-set EQ_dep = `check_event $current_EQ |grep -w EQ_DEP |awk '{print $2}'`
-set EQ_mag = `check_event $current_EQ |grep -w EQ_MAG |awk '{print $2}'`
 set VS_STA_LAT = $TMP[6]
 set VS_STA_LON = $TMP[7]
 set STA_lat = $VS_STA_LAT
@@ -120,16 +121,22 @@ set misfit_pre = $TMP[21]
 set misfit_bak = $TMP[22]
 set stretch_ccc = $TMP[23]
 set stretch_coeff = $TMP[24]
+set vs_polar = $TMP[25]
+set EQ_dep = $TMP[26]
+#//set EQ_dep = `check_event $current_EQ |grep -w EQ_DEP |awk '{print $2}'`
+set one_period = $TMP[31]
+set SNR_peak_trough = $TMP[32]
+set traffic_nearby = $TMP[33]
 
 set DIST = $VS_DIST
 
 set polar_flag = 1
 # calculate polarity for current VS
-set vs_polar = `get_polarity $EQ $STA_lat $STA_lon $PHASE`
-if ($vs_polar == "" ) then
-set vs_polar = 0
-endif
-set vs_polar = `printf "%.2f" $vs_polar`
+#set vs_polar = `get_polarity $EQ $STA_lat $STA_lon $PHASE`
+#if ($vs_polar == "" ) then
+##set vs_polar = 0
+#endif
+#set vs_polar = `printf "%.2f" $vs_polar`
 
 
 ##echo "---> Working on plotting $sta PHASE is $PHASE"
@@ -219,15 +226,16 @@ EOF
 
 	# ================== plot the trace =====================
 		set long_color = 0/0/0
-		set long_color_flag = `echo ddd |awk '{if('$vs_polar' > -0.15 && '$vs_polar' < 0.15 ) print "green"; else print "hahaha"}'`
+		set long_color_flag = `echo ddd |awk '{ if ('$vs_polar' > -0.05 && '$vs_polar' < 0.05) print "dark"; else if('$vs_polar' > -0.15 && '$vs_polar' < 0.15 ) print "green"; else print "hahaha"}'`
 
 #set long_color_flag = "hahah"
 ##echo "sta $sta long color is $long_color_flag"
 		if($long_color_flag == "green" ) then
 		set long_color = 178/102/255
+		else if( $long_color_flag == "dark" ) then
+		set long_color = 0/153/51
 		endif
 
-		
 
 		psxy $long -JX5i/0.5i -R$xmin/$xmax/-1/1 -W/$long_color  -O -K >>$OUTFILE
 
@@ -345,7 +353,7 @@ continue
 
 ## decide if rel_time is too big
 	set int_rel_time = `printf "%.0f" $rel_time`
-	if($int_rel_time > 100 || $int_rel_time < -100 ) then
+	if($int_rel_time > 100 || $int_rel_time < -100 || $int_rel_time == 0 ) then
 @ NUM ++
 	continue
 	endif
@@ -398,7 +406,7 @@ EOF
 	pstext -JX2i/0.5i -R0/1/0/1 -O -K -N -P -X5.2i <<END>>$OUTFILE
 	0 1.0  7 0 0 LB  ----------------------
 	0 0.75 7 0 0 LB IVS:$ivs DIST:$VS_DIST misfit: $misfit_pre/$misfit/$misfit_bak
-	0 0.5  7 0 0 LB STA:$STA_lat $STA_lon polar: $vs_polar
+	0 0.5  7 0 0 LB STA:$STA_lat $STA_lon polar: $vs_polar period: $one_period near: $traffic_nearby
 	0 0.25 7 0 0 LB dt:$VS_ONSET aveSNR: $ave_SNR stackSNR:$stack_SNR peakSNR:$stack_SNR_peak
 	0 0.0  7 0 0 LB tstar: $tstar_ccc/$tstar_factor gau:$gau_ccc/$gau_factor stretch:${stretch_ccc}/${stretch_coeff}
 END

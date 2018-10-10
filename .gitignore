@@ -1,0 +1,8 @@
+back/
+clean.sh
+CMT.data
+done.*
+LOG/*
+PLOTDIR/*
+WORKDIR/*
+S_EW_DIR/*

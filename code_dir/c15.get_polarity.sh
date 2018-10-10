@@ -32,23 +32,35 @@ set work_dir = $WORKDIR
 
 set EQ = `cat $eventStation |awk 'NR==2 {print $19}'`
 
-set CMT_file = $work_dir/CMT.data
-set CMT = `grep -w $EQ $CMT_file`
+set tmp_cmpt = $WORKDIR/.tmp.cmt
+set command = $WORKDIR/.command.cmt
+cat << EOF >! $command
+use hongyu_db1;
+select STRIKE,DIP,RAKE FROM EQ_LIST WHERE EQ = $EQ;
+EOF
+hongyusql_command $command |awk 'NR>1 {print $0}' > ! $tmp_cmpt
+
+#set CMT_file = $work_dir/CMT.data
+#set CMT = `grep -w $EQ $CMT_file`
 echo "----> Looking for CMT Info "
-set EQ_name_found = `echo $CMT |awk '{print $1}'`
+#set EQ_name_found = `echo $CMT |awk '{print $1}'`
 
 # if we dont find CMT info, we dont use CMT
-if( $EQ_name_found  == "" ) then
-echo "----> CMT for $EQ is not found"
-awk '{print $1,0}' $eventStation > $polarity_info
-exit 0
-else 
-echo "----> CMT for $EQ is $CMT"
-endif
+#if( $EQ_name_found  == "" ) then
+#echo "----> CMT for $EQ is not found"
+#awk '{print $1,0}' $eventStation > $polarity_info
+#exit 0
+#else 
+#echo "----> CMT for $EQ is $CMT"
+#endif
 
-set strike =  $CMT[2]
-set dip = $CMT[3]
-set rake = $CMT[4]
+set strike = `cat $tmp_cmpt |awk '{print $1}'`
+set dip = `cat $tmp_cmpt |awk '{print $2}'`
+set rake = `cat $tmp_cmpt |awk '{print $3}'`
+
+#set strike =  $CMT[2]
+#set dip = $CMT[3]
+#set rake = $CMT[4]
 
 echo $strike $dip $rake
 set CMT2RAD = $PWD/radiation.f90

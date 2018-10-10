@@ -3,7 +3,7 @@
 
 
 ### This is the directory information 
-<CURRENT_DIR>			/home/hongyu_ubuntu/EQVirSa
+<CURRENT_DIR>			/mnt/data2/hongyu/EQVirSa
 <WORKDIR>				WORKDIR
 <PLOTDIR>				PLOTDIR
 <MODEL_DIR>				/home/hongyu_ubuntu/Archive/006_tomography_models
@@ -14,23 +14,23 @@
 ### Directory information end here
 
 
-<PHASE_LIST>			S ScS Sdiff 
-#<PHASE_LIST>			S ScS S3 ScS3 ScS4 S4 S5  Sdiff
-#<PHASE_LIST>			S ScS S3 ScS3 ScS4 S4 S5  Sdiff
-#<PHASE_LIST>			SS SSS ScSScS
-#<PHASE_LIST>			Sdiff
-#<PHASE_LIST>			S ScS Sdiff SS SSS ScSScS
-#<PHASE_LIST>			S S4 ScS3 S3 ScS4
-#<PHASE_LIST>			SSSS SSSSm ScSScSScS ScSScSScSm ScSScSScSScS
-#<PHASE_LIST>			 ScSScS ScSScSScS ScSScSScSm SSSS SSSSm SSS SSSm SSSSS SSSSSm
-#<PHASE_LIST>			S ScS
-<PHASE_LONG_WIN_BEG>	-100
-<PHASE_LONG_WIN_LEN>	200
+<PHASE_LIST>			S3m
+#<PHASE_LIST>			S3m S4 S4m S5 S5m  S6m S2m
+<PHASE_LONG_WIN_BEG>	-150
+<PHASE_LONG_WIN_LEN>	300
 <PHASE_WIN_BEG>			-10
 <PHASE_WIN_LEN>			30
 <PHASE_NOISE_BEG>		-100
 <PHASE_NOISE_LEN>		80
 <DELTA>					0.1
+
+
+## DEFINE START POSITION
+<LAT_EQ_LOC>		11
+<LON_EQ_LOC>		0
+#<LAT_STA_LOC>		10
+#<LON_STA_LOC>		5
+<INDEX_LOC>			10000
 
 # mask window for long win, to avoid code pick anything too far away fron PREM
 # prediction, we mask out signal outside of [MASK_MIN, MASK_MAX]
@@ -38,7 +38,7 @@
 <MASK_MAX>				35
 
 #<S_ES_DIR>				/mnt/data2/hongyu/Catalog_Plots/mother_dir/C01_make_eventinfo/eventinfo_dir/S_ES_DIR_all
-<S_ES_DIR>				/home/hongyu_ubuntu/EQVirSa/S_EW_DIR
+<S_ES_DIR>				/mnt/data2/hongyu/EQVirSa/S_EW_DIR
 
 ## Define virtual station network setup
 # VS -> Virtual Station
@@ -51,7 +51,7 @@
 #<VS_EQ_RADIUS>				1.5			# degree, 1degree ~ 110km
 #<VS_STA_RADIUS>				1.5		# degree, 1degree ~ 110km
 <VS_STA_RADIUS>				5		# degree, 1degree ~ 110km
-<eventinfo_max_threshold>			5	# for each EQ_grid/STA_grid/PHASE, if we have more then this number 
+<eventinfo_max_threshold>			2	# for each EQ_grid/STA_grid/PHASE, if we have more then this number 
 										# of good records from eventinfo, then we skip making virtual station
 <eventStation_min_threshold>		3	# for each EQ_grid/STA_grid/PHASE, if we have less then this number
 										# of possible records, then we skip making virtual station
