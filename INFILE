@@ -63,7 +63,6 @@
 <MASK_MIN>				-20
 <MASK_MAX>				35
 
-#<S_ES_DIR>				/mnt/data2/hongyu/Catalog_Plots/mother_dir/C01_make_eventinfo/eventinfo_dir/S_ES_DIR_all
 <S_ES_DIR>				/mnt/data2/maligaro/EQVirSa/S_EW_DIR
                         # Empirical wavelet of S wave for events, this is mandatory
 

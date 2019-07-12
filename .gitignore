@@ -5,3 +5,4 @@ LOG/*
 PLOTDIR/*
 WORKDIR/*
 S_EW_DIR/
+bin/TAUP_DIR
