@@ -50,7 +50,6 @@ cp $PWD/INFILE* $DATADIR/
 cp $PWD/eventinfo $DATADIR
 
 
-
 #echo "copy CDIR to WORKDIR"
 # go to virtustation and make
 cd $C_DIR/virtual_station/

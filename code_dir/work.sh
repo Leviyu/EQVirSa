@@ -53,14 +53,8 @@ cp $PWD/code_dir/c06.record_filter_and_resample.sh .
 cp $PWD/code_dir/unique_station.list .
 #//cp $PWD/code_dir/list.unique_EQ .
 
-##cp eventStation.${EQ} eventStation
-# creat EQ_LIST and STA_LIST
-#set EQ_LIST = $DATADIR/$EQ/list.EQ
-#set STA_LIST = $DATADIR/$EQ/list.STA
-
 
 # prepare a plot_script INPUT for ivs
-echo "DATADIR is $DATADIR"
 echo $DATADIR $PLOTDIR $ID $PWD $PHASE $EQ $PWD/code_dir >! $DATADIR/$EQ/INPUT.plot
 
 cat $DATADIR/$EQ/eventinfo |grep -w $PHASE |awk '{print $12,$1,$20}'>! $DATADIR/$EQ/eventinfo.EQ.STA.PHASE
@@ -73,13 +67,4 @@ echo "==========================================================================
 csh $PWD/code_dir/plot.sh $ID $PHASE $EQ $DATADIR $PLOTDIR  $PWD 
 
 exit 0
-
-
-
-
-#csh $PWD/c15.get_polarity.sh $PWD $DATADIR $PLOTDIR $PHASE
-#set S_ES = $PWD/S_EW_DIR/S_ES.${EQ}
-#./DD << EOF 
-#$eventinfo $PHASE $S_ES
-##EOF
 

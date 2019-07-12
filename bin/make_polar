@@ -1,0 +1,127 @@
+#!/bin/tcsh
+# This script makes big taup_file for each EQ-STA including all possible phases
+# INPUT:
+# 	EQ
+# 	STA
+# 	eventStation
+# OUTPUT:
+# 	big_taup time file named after taup_time.${EQ}.${STA} under current
+# 	directory
+
+
+
+set EQ = $1
+set STA = $2
+set PHASE = $3
+set COMP = $4
+
+
+set CMT_file = /mnt/data2/maligaro/EQVirSa/code_dir/CMT.data
+set PWD = /mnt/data2/maligaro/EQVirSa/bin/TAUP_DIR
+set file_directory = $PWD/taup_repository
+
+set big_polar_file = $PWD/polarity_file.data
+
+# convert PHASE from simple to complex
+set conv = $PWD/lib/name_simple_to_complex.py
+
+set PHASE = `python2 $conv $PHASE`
+
+# 1. define SODDIR eventStation file
+set SODDIR = /mnt/soddisk/soduser/Merge.Mw6.50km
+set eventStation = $SODDIR/$EQ/eventStation.dump.${EQ}
+if(! -e $eventStation ) then
+set eventStation = $SODDIR/$EQ/eventStation.${EQ}
+endif
+
+
+# clean up the station name
+set PPP_flag = `echo $STA |grep PPP`
+if($PPP_flag == "") then
+	set a = 1
+else
+	set STA = `echo $STA |rev |cut -c 5-|rev`
+endif
+
+
+# check if polar exist 
+set polar = `cat $big_polar_file|grep -w $EQ  |grep -w $STA |grep -w $PHASE |grep -w $COMP |awk 'NR==1 {print $7}'`
+if($polar != "" ) then
+echo $polar
+exit 0
+endif
+
+set TMP = `cat $eventStation |awk -v sta=$STA '$1==sta {print $0}'|awk 'NR==1 {print $0}'`
+if($TMP[1] == "" ) then
+exit 0
+endif
+
+set eq_lat = $TMP[11]
+set eq_lon = $TMP[12]
+set eq_dep = $TMP[13]
+set sta_lat = $TMP[9]
+set sta_lon = $TMP[10]
+set AZ = $TMP[5]
+
+
+set taup_time_file = $file_directory/$EQ/taup_time.${EQ}.${STA}
+
+if(! -e $taup_time_file) then
+csh $PWD/c01.make_taup_time.sh $EQ $STA
+endif
+
+if(`echo $PHASE |grep m` == "") then
+set takeoff = `cat $taup_time_file |awk -v sss=$PHASE 'sss==$3&&$8<180 {print $6}'|awk 'NR==1 {print $1}'`
+else
+set main_PHASE = `echo $PHASE | sed 's/.$//' `
+set takeoff = `cat $taup_time_file |awk -v sss=$main_PHASE 'sss==$3&&$8>180 {print $6}'|awk 'NR==1 {print $1}'`
+endif
+#echo "take off is $takeoff"
+
+# find CMT
+set CMT = `cat $CMT_file |grep -w $EQ`
+if($#CMT < 3) then
+exit 0
+endif
+set strike = $CMT[2]
+set dip = $CMT[3]
+set rake = $CMT[4]
+
+
+# find the component P SV SH for current phase
+if(`echo $PHASE |grep P` != "") then
+	set the_comp = P
+endif
+
+if(`echo $PHASE |grep S` != "") then
+	if( $COMP == T ) then
+	set the_comp = SH
+	else if($COMP == R ) then
+	set the_comp = SV
+	endif
+endif
+
+set CMT2RAD = $PWD/lib/CMT2RAD
+set RADTHAZ = $PWD/lib/RADTHAZ
+
+set WORKDIR = $PWD/WORKDIR/CMT.${EQ}.${STA}.${PHASE}
+mkdir -p $WORKDIR
+cd $WORKDIR
+$CMT2RAD << EOF >> & /dev/null
+$strike $dip $rake
+EOF
+
+$RADTHAZ << EOF >! $WORKDIR/tmp
+$strike $dip $rake
+$the_comp
+$takeoff $AZ
+EOF
+
+
+set polar_pre = `cat $WORKDIR/tmp |awk 'NR==1 {print $1}'`
+# use real PHASE name here ScSScSScS
+echo "$EQ $STA $PHASE COMP $COMP polar_pre  $polar_pre ">> $big_polar_file
+echo $polar_pre
+
+/bin/rm -rf $WORKDIR
+exit 0

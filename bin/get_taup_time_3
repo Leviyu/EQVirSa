@@ -1,0 +1,62 @@
+#!/bin/tcsh
+
+# ====================================================================
+# This is a csh script to return the taup_time for a record
+# 
+# Input: EQ info
+# 		station
+# 		phase info
+#
+# Output: a file store travel time for all phases for current EQ_STA
+#
+#
+# DATE:					Keywords:
+#
+# Reference:
+# ===================================================================
+
+
+set PHASE = $1
+set eq_lat = $2
+set eq_lon = $3
+set eq_dep = $4
+set sta_lat = $5
+set sta_lon = $6
+
+set name_convert = ~/bin/phase_name_convert_complex_to_simple.py
+set PHASE = `python2 $name_convert $PHASE`
+
+# remove major flag
+if(`echo $PHASE | grep m ` == "" ) then
+set main_PHASE = $PHASE
+else
+set main_PHASE = `echo $PHASE | sed 's/.$//' `
+endif
+
+#set taup_time_file = ~/bin/tmp_TAUP/tmp.taup.$$
+
+#echo "main $main_PHASE traffic $main_traffic"
+
+# Get minor phase taup_time 
+# This is done by grabing the first travel time given by taup_time that < 180
+# The major phase is done by grabing the first travel time given by taup that is > 180
+
+if($PHASE == $main_PHASE ) then
+set t_main = `taup_time -mod prem -ph $main_PHASE -h $eq_dep -sta $sta_lat $sta_lon -evt $eq_lat $eq_lon |awk 'NR>5 && $8<180 {print $4}' |awk 'NR==1 {print $1}'`
+else 
+set t_main = `taup_time -mod prem -ph $main_PHASE -h $eq_dep -sta $sta_lat $sta_lon -evt $eq_lat $eq_lon |awk 'NR>5 && $8>180 {print $4}' |awk 'NR==1 {print $1}'`
+endif
+
+
+
+set t1 = `printf "%.0f" $t_main`
+
+if( $t1 == "" ) then
+echo 0
+exit 0
+endif 
+
+echo $t_main
+
+
+exit 0

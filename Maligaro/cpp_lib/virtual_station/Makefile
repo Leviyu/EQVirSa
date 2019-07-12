@@ -58,23 +58,12 @@ libHongyucpp.a: $(TOOL_OBJ)  $(TOMO_OBJ)
 #%.o: $(TOOL_DIR)/%.cpp
 $(TOOL_DIR)/%.o: $(TOOL_DIR)/%.cpp $(TOOL_DIR)/%.h
 	$(CC) -c -o $@ $^ $(CXXFLAGS) 
-#$(TOOL_OBJ): $(TOOL_DIR)/%.cpp $(TOOL_DIR)/%.h
-#$(TOOL_OBJ): $(TOOL_CPP) $(TOOL_DIR)/%.h
-#$(TOOL_OBJ): $(TOOL_CPP) 
 
 $(TOMO_DIR)/%.o: $(TOMO_DIR)/%.cpp $(TOMO_DIR)/%.h
-#$(TOMO_OBJ): $(TOMO_DIR)/%.cpp  $(TOMO_DIR)/%.h
-#$(TOMO_OBJ): $(TOMO_CPP)  $(TOMO_DIR)/%.h
-#$(TOMO_OBJ): $(TOMO_CPP)  
 	$(CC) -c -o $@ $^ $(CXXFLAGS) 
-	#g++ -c -o -std=c++11 $@ $^ $(CXXFLAGS)
 
-#$(ESF_DIR)/%.o: ${ESF_DIR}/%.c
-#$(ESF_OBJ): ${ESF_DIR}/%.c
-	#gcc -c -o $@ $< $(CXXFLAGS)
 
 
 
 clean :
 	\rm *.o *~ EWM *.a $(TOOL_OBJ) $(TOMO_OBJ) 
-	#\rm *.o *~ EWM *.a $(TOOL_OBJ) $(TOMO_OBJ) $(ESF_OBJ)
