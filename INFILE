@@ -1,36 +1,62 @@
 #!/bin/tcsh
 
 
+## =======================================================================
+## =======================================================================
+# most frequently used parameters
+<CURRENT_DIR>			/mnt/data2/maligaro/EQVirSa
+                        # absolute path of the EQVirSa Package
 
-### This is the directory information 
-<CURRENT_DIR>			/mnt/data2/hongyu/EQVirSa
+<ID>                    test6
+<EXISTING_EVENTINFO>	eventinfo
+                        # accepted record information, we use this file to search for existing event-station 
+                        # geometry
+
+<EVENT_STATION_FILE>	eventStation
+                        # meta eventStation list that is used to search and stack virtual stations.
+                        # you can customize this file by grabbing eventStation file from soduser
+                        # under ~soduser/Merge.Mw6.50km/${EQ}
+
+
+<PHASE_LIST>			ScS3m
+                        # Phase name, major arc phase is named after Sn or ScSn
+                        # currently support
+                        # S, Sdiff, SS, SSm, S3, S3m, S4, S4m, S5, S5m, S6m
+                        # ScS, ScSScS, ScS3, ScS3m, ScS4, ScS4m, ScS5, ScS5m
+
+
+
+## =======================================================================
+## =======================================================================
+
+<PHASE_LONG_WIN_BEG>	-150
+                        # starting time window for plotting, relative to PREM
+<PHASE_LONG_WIN_LEN>	300
+                        # plotting window length in seconds
+<PHASE_WIN_BEG>			-10
+                        # starting phase window, relative to PREM
+<PHASE_WIN_LEN>			30
+                        # phase window length in seconds
+<PHASE_NOISE_BEG>		-100
+                        # starting noise window, relative to PREM
+<PHASE_NOISE_LEN>		80
+                        # noise window length in seconds
+<DELTA>					0.1 
+                        # interpolation increment in seconds
+            
+
+# Directory Information
 <WORKDIR>				WORKDIR
+                        # workdir where the calculation happens, under ./$CURRENT_DIR
 <PLOTDIR>				PLOTDIR
-<MODEL_DIR>				/home/hongyu_ubuntu/Archive/006_tomography_models
-<TAUP_PATH_DIR>			TAUP_PATH_DIR
+                        # where the plots are stored, under ./$CURRENT_DIR
 <CPP_LAB>				Maligaro/cpp_lib
-<SRCDIR>				code_dir
 <C_DIR>					Maligaro/cpp_lib
+                        # where c and cpp files are stored
+<SRCDIR>				code_dir
+                        # where scripts are stored
 ### Directory information end here
 
-
-<PHASE_LIST>			S3m
-#<PHASE_LIST>			S3m S4 S4m S5 S5m  S6m S2m
-<PHASE_LONG_WIN_BEG>	-150
-<PHASE_LONG_WIN_LEN>	300
-<PHASE_WIN_BEG>			-10
-<PHASE_WIN_LEN>			30
-<PHASE_NOISE_BEG>		-100
-<PHASE_NOISE_LEN>		80
-<DELTA>					0.1
-
-
-## DEFINE START POSITION
-<LAT_EQ_LOC>		11
-<LON_EQ_LOC>		0
-#<LAT_STA_LOC>		10
-#<LON_STA_LOC>		5
-<INDEX_LOC>			10000
 
 # mask window for long win, to avoid code pick anything too far away fron PREM
 # prediction, we mask out signal outside of [MASK_MIN, MASK_MAX]
@@ -38,39 +64,35 @@
 <MASK_MAX>				35
 
 #<S_ES_DIR>				/mnt/data2/hongyu/Catalog_Plots/mother_dir/C01_make_eventinfo/eventinfo_dir/S_ES_DIR_all
-<S_ES_DIR>				/mnt/data2/hongyu/EQVirSa/S_EW_DIR
+<S_ES_DIR>				/mnt/data2/maligaro/EQVirSa/S_EW_DIR
+                        # Empirical wavelet of S wave for events, this is mandatory
 
 ## Define virtual station network setup
-# VS -> Virtual Station
-<VS_LATITUDE_INC>		7		# in degree
-#<VS_LATITUDE_INC>		3		# in degree
-#<VS_LONGITUDE_INC>		NON     # this is calcuated to match the distance in degree 
-<VS_LONGITUDE_INC>		NON     # this is calcuated to match the distance in degree 
-								# for latitude increment 1degree = 110km here
-<VS_EQ_RADIUS>				5			# degree, 1degree ~ 110km
-#<VS_EQ_RADIUS>				1.5			# degree, 1degree ~ 110km
-#<VS_STA_RADIUS>				1.5		# degree, 1degree ~ 110km
-<VS_STA_RADIUS>				5		# degree, 1degree ~ 110km
-<eventinfo_max_threshold>			2	# for each EQ_grid/STA_grid/PHASE, if we have more then this number 
-										# of good records from eventinfo, then we skip making virtual station
-<eventStation_min_threshold>		3	# for each EQ_grid/STA_grid/PHASE, if we have less then this number
-										# of possible records, then we skip making virtual station
-#<VS_EXISTING_RECORD_NUM_THRESHOLD>	6	# if we have more then 5 record for a give EQ-STA grid pair
-										# in eventinfo
-										# then we dont stack	
-#<VS_RECORD_NUM_THRESHOLD>			6	# only when we have more then 10 records for currenet 
-										# EQ-STA grid pair in eventStation
-										# then we stack
-
-
-#other
-<EXISTING_EVENTINFO>	eventinfo
-
+<VS_LATITUDE_INC>		7		
+                        # in degree, is converted to km
+                        # used to define virtual station grid setup, it is the distance in km of how far away
+                        # between two grid centers.
+<VS_EQ_RADIUS>			5	
+                		# in degree
+                        # it is the radius to find adjacent events for given grid
+<VS_STA_RADIUS>			5
+                		# in degree
+                        # it is the radius to find adjacent stations for given grid, for a given event
+<eventinfo_max_threshold>			2	
+                                    # for each EQ_grid/STA_grid/PHASE, if we have more then this number 
+									# of good records from eventinfo (accepted good records), then we 
+                                    # skip making virtual station
+<eventStation_min_threshold>		3	
+                                    # for each EQ_grid/STA_grid/PHASE, if we have less then this number
+									# of possible records, then we skip making virtual station
 
 <FILTER_FLAG>		bp co 0.01 0.0625 n 2 p 1
-
-
+                    # Filter that we use to preprocess the sac file
 
 <SNR_CUT>		1.8
+                # Signal-to-noise ratio cutoff, anything below this value would be rejected
 <CCC_CUT>		0.85
+                # cross-correlation coefficients cutoff (between record and t*(SEW) ), 
+                # anything below this value would be rejected
+
 

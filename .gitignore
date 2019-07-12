@@ -1,6 +1,5 @@
 back/
 clean.sh
-CMT.data
 done.*
 LOG/*
 PLOTDIR/*

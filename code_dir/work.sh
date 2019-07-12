@@ -70,7 +70,7 @@ EOF
 
 echo "***Empirical Wavelet Algorithm Ending for $EQ   PHASE: $PHASE **********`date`"
 echo "============================================================================="
-#csh $PWD/code_dir/plot.sh $ID $PHASE $EQ $DATADIR $PLOTDIR  $PWD 
+csh $PWD/code_dir/plot.sh $ID $PHASE $EQ $DATADIR $PLOTDIR  $PWD 
 
 exit 0
 

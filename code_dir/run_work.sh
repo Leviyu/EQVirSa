@@ -32,7 +32,7 @@ cp $PWD/WORKDIR/INFILE $WORKDIR/$EQ/
 
 
 set INFILE = ${WORKDIR}/$EQ/INFILE
-set DIR =						`grep -w CURRENT_DIR $INFILE | awk '{print $2}'`
+set DIR =						`grep -w CURRENT_DIR $INFILE | awk 'NR==1 {print $2}'`
 set DATADIR =					`grep -w WORKDIR $INFILE | awk '{print $2}'`
 set PLOTDIR =					`grep -w PLOTDIR $INFILE | awk 'NR==1 {print $2}'`
 set C_DIR =						`grep -w C_DIR $INFILE | awk '{print $2}'`
@@ -45,13 +45,11 @@ set PLOTDIR = $PLOTDIR/$ID
 #//bin/rm -rf $DATADIR
 mkdir -p $DATADIR 
 mkdir -p $PLOTDIR
-cp $PWD/CMT.data $DATADIR/
-cp $PWD/INPUT_EQ_LIST $DATADIR/
+cp $PWD/code_dir/CMT.data $DATADIR/
 cp $PWD/INFILE* $DATADIR/
 cp $PWD/eventinfo $DATADIR
 
 
-set EQ_LIST = $DATADIR/INPUT_EQ_LIST
 
 #echo "copy CDIR to WORKDIR"
 # go to virtustation and make
@@ -63,7 +61,7 @@ set EQ_PHASE_LIST = `grep -w PHASE_LIST $INFILE | awk 'NR==1 {print $0}' |cut -f
 foreach PHASE (`echo $EQ_PHASE_LIST`)
 	set EQ = ${ID}_${PHASE}
 	set INP = ( $PWD $DATADIR $PLOTDIR $EQ $C_DIR $SHELL_DIR $ID $DIR $PHASE )
-	echo "---> Working on $ID $EQ"
+	echo "---> Working on $ID $EQ PHASE :$PHASE"
 	csh $PWD/code_dir/work.sh $INP > & $PWD/LOG/logfile.${ID}.${PHASE} &
 	sleep 3s
 

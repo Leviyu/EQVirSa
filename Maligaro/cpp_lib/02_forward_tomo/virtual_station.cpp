@@ -235,6 +235,7 @@ void virtual_station::get_traffic_time()
 		this->traffic_phase_list.push_back("S6");
 		this->traffic_phase_list.push_back("sS6");
 		this->traffic_phase_list.push_back("ScS4");
+		this->traffic_phase_list.push_back("ScS3m");
 		this->traffic_phase_list.push_back("ScS4m");
 		this->traffic_phase_list.push_back("sScS4");
 		this->traffic_phase_list.push_back("ScS5");
@@ -372,15 +373,33 @@ void virtual_station::get_traffic_time()
 		this->traffic_phase_list.push_back("ScS6");
 		this->traffic_phase_list.push_back("sScS6");
 		this->traffic_phase_list.push_back("sScS5m");
+		this->traffic_phase_list.push_back("S6m");
+		this->traffic_phase_list.push_back("sS6m");
 	}
 	else if( this->PHASE.compare("P") ==0 )
 	{
 		this->traffic_phase_list.push_back("PcP");
+		this->traffic_phase_list.push_back("Pdiff");
 		this->traffic_phase_list.push_back("pP");
+		this->traffic_phase_list.push_back("sP");
+		this->traffic_phase_list.push_back("PP");
+		this->traffic_phase_list.push_back("pPP");
+		this->traffic_phase_list.push_back("sPP");
 	}
 	else if( this->PHASE.compare("Pdiff") ==0 )
 	{
 		this->traffic_phase_list.push_back("pPdiff");
+		this->traffic_phase_list.push_back("Sdiff");
+		this->traffic_phase_list.push_back("PP");
+		this->traffic_phase_list.push_back("pPP");
+		this->traffic_phase_list.push_back("sPP");
+	}
+	else if( this->PHASE.compare("PcP") ==0 )
+	{
+		this->traffic_phase_list.push_back("pPcP");
+		this->traffic_phase_list.push_back("PP");
+		this->traffic_phase_list.push_back("pPP");
+		this->traffic_phase_list.push_back("sPP");
 	}
 
 	//cout << " current traffic vector size is " << this->traffic_phase_list.size() << endl;
