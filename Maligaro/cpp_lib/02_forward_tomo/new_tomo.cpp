@@ -1,19 +1,5 @@
 
 #include "forward_tomography.h"
-/******************************************************************
- * This is a c script to initiate tomography 
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
-
-
 void new_tomo::initiate_tomo()
 {
 	cout << "---> Tomography is initiated " << endl;
@@ -49,54 +35,12 @@ void new_tomo::initiate_tomo()
 
 
 
-/******************************************************************
- * This is a c script to free the memory space
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
-
-
 new_tomo::~new_tomo()
 {
 
 	cout<< "new_tomo is killed flag is  "<<this->flag_is_new_tomo <<endl;
 	int count;
-	// free allocated memory
-	//delete[] this->dep;
-	//delete[] this->lat;
-	//if( this->flag_is_new_tomo.compare("old") == 0 )
-		//delete[] this->lon;
-	//else
-	//{
-		//for(count = 0; count < this->num_lat; count++)
-			//delete[] this->lon2[count];
-		//delete[] this->lon2;
-	//}
 
-	// delete 2D array
-	for(count = 0; count< this->num_dep; count++)
-	{
-			//delete[] this->my_cell[count];
-			//delete[] this->dvs[count];
-			//delete[] this->sum_dvs_in_cell[count];
-			//delete[] this->sum_num_in_cell[count];
-			//delete[] this->delta_dvs[count];
-			//delete[] this->gradient[count];
-	}
-	//delete 3D array
-	//delete[] this->my_cell;
-	//delete[] this->dvs;
-	//delete[] this->sum_dvs_in_cell;
-	//delete[] this->sum_num_in_cell;
-	//delete[] this->delta_dvs;
-	//delete[] this->gradient;
 }
 
 
@@ -180,30 +124,6 @@ int new_tomo::print()
 	flag = "Model Name:  " + this->MODEL;
 	cout << flag  << endl;
 
-	//if(this->CMB_lat_cell_number == this->CMB_lat_cell_number) 
-	//{
-	//flag = "CMB cell number:   " +to_string ( this->CMB_lat_cell_number );
-	//cout << flag  << endl;
-	//}
-
-	//if( this->lat_min == this->lat_min )
-	//{
-	//flag = "Lat minmax  " + to_string ( this->lat_min ) + "  " + to_string(this->lat_max);
-	//cout << flag  << endl;
-	//}
-	//if( this->num_dep == this->num_dep )
-	//{
-		//flag = "Dimension: Dep  " + to_string(this->num_dep) + "lat : " + to_string(this->num_lat) + "lon:  " + to_string(this->num_lon);
-		//cout << flag  << endl;
-
-		//flag = "depth profile: ";
-		//cout << flag  << endl;
-		
-		//int count;
-		//for(count = 0 ; count< this->num_dep; count++ )
-			//cout << this->dep[count] << endl;
-
-	//}
 
 
 	flag = "============================================";
@@ -215,18 +135,6 @@ int new_tomo::print()
 
 
 
-/******************************************************************
- * This is a c code to initiate new_tomo
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 new_tomo::new_tomo()
 {
 
@@ -258,18 +166,6 @@ int new_tomo::getDep(int idep)
 
 
 
-/******************************************************************
- * This is a c code to convert old tomo into new tomo
- *	in this function, we need to include necessary info for new_tomo
- *	Input
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 int new_tomo::convert_to_new_tomo(new_tomo* old_tomo)
 {
@@ -307,19 +203,15 @@ int new_tomo::convert_to_new_tomo(new_tomo* old_tomo)
 		new_dep = this->dep[idep];
 		new_lon = this->lon2[ilat][ilon];
 
-		//cout << "lon" << new_lon << endl;
 
 
 		this->my_cell[idep][ilat][ilon].dvs = old_tomo->find_dvs_with_dep_lat_lon(new_dep,new_lat,new_lon);
-		//if(new_dep > 400)
-		//cout << " dep lat lon dvs " << new_dep << " " << new_lat << " " << new_lon << " " << this->my_cell[idep][ilat][ilon].dvs << endl;
 		if(  this->my_cell[idep][ilat][ilon].dvs != this->my_cell[idep][ilat][ilon].dvs)
 			cout << "ERROR find_dvs_with_dep_lat_lon non value problem !" << endl;
 		if( this->my_cell[idep][ilat][ilon].dvs > 30
 				|| this->my_cell[idep][ilat][ilon].dvs < -30)
 		{
 			cout << "ERROR find_dvs_with_dep_lat_lon  too big problem !" << endl;
-			//cout << "idep ilat ilon "<< idep << " " << ilat << "  "  << ilon <<" "<< this->my_cell[idep][ilat][ilon].dvs << endl;
 		}
 
 
@@ -353,12 +245,6 @@ int new_tomo::define_horizontal_profile()
 	double CMB_equator_length;
 	double CMB_latitude_delta_length;
 	double CMB_latitude_delta_length_in_degree;
-		//double latitude_angle_in_degree;
-		//double latitude_angle_in_radi;
-		//int lat_num_cells;
-		//double lat_radius;
-		//double current_lat_delta_length;
-		//double current_lat_delta_length_in_degree;
 	CMB_equator_length = 6371-this->dep[idep];
 	CMB_latitude_delta_length = 3.1415926*CMB_equator_length / this->CMB_lat_cell_number;
 	CMB_latitude_delta_length_in_degree = 180/this->CMB_lat_cell_number;
@@ -370,16 +256,9 @@ int new_tomo::define_horizontal_profile()
 		double current_lon_delta_length_in_degree;
 		double current_lon_number;
 	// just to reminder, the CMB_lat_cell_number + 1 = num_lat
-
-
-		//cout <<" CMB_latitude_delta_length_in_degree" << CMB_latitude_delta_length_in_degree << endl;
 	int ilat,ilon;
 	for(ilat = 0; ilat < this->num_lat; ilat++ )
 	{
-		//cout << "working on ilat " << ilat << endl;
-		//cout << " lat " << this->lat[ilat] << endl;
-		//cout << " min " << this->lat_min << endl;
-		//cout << " CMB degree " << CMB_latitude_delta_length_in_degree << endl;
 
 		this->lat[ilat] = this->lat_min + ilat*CMB_latitude_delta_length_in_degree;
 		if( this->lat[ilat] == 90 )
@@ -400,75 +279,19 @@ int new_tomo::define_horizontal_profile()
 		current_lon_delta_length_in_degree = 360 / current_lon_number;
 		
 		
-		//latitude_angle_in_degree = abs(this->lat[ilat]);
-		//latitude_angle_in_radi = latitude_angle_in_degree / 180 * 3.1415926;
-		//lat_radius = CMB_equator_length * cos( latitude_angle_in_radi );
-		////cout << "lat radius " << lat_radius << endl;
-		//lat_num_cells	= ceil (lat_radius  / CMB_latitude_delta_length);
-		//current_lat_delta_length = lat_radius / lat_num_cells;
-		//current_lat_delta_length_in_degree = 360 / lat_num_cells;
-
-		//for(ilon = 0; ilon < this->)
-
-		//cout << "current lat "<< this->lat[ilat] << " number of cell at current lat" << current_lon_number << endl;;
-		//cout << "CMB lat cell number " << this->CMB_lat_cell_number << endl;
-		//cout <<" current lon circular length is "<< current_lon_circular_dl << endl;
-		//cout << "current_radius is " << current_radius << endl;
-		//cout << "delta length " << current_delta_length<< endl;
-		//cout << "current_lon_delta_length in degree  " << current_lon_delta_length_in_degree << endl;
-
 		// store this lat dependent lon_num and value 
-
 		this->num_lon2[ilat] = current_lon_number ;
-		
-		//cout << "ilat  " << ilat << endl;
 		for(ilon = 0; ilon < this->num_lon2[ilat]; ilon++)
 		{
 			this->lon2[ilat][ilon] = -180 + ilon * current_lon_delta_length_in_degree;
-			//cout << "         ilon " << this->lon2[ilat][ilon] << endl;
 		}
 
 
-
 	}
-	//cout << "working on dep " << idep << endl;
-
-	//cout << "tomo num lat is "<< this->num_lat<<endl;
-	//for(ilat = 0; ilat < this->num_lat; ilat++ )
-		//for(ilon = 0; ilon < this->num_lon2[ilat]; ilon++)
-			//cout << "ilat is " << ilat <<"current lon number is  "<< this->num_lon2[ilat] << endl;
 
 
 	return 0;
 }
-
-
-
-
-
-
-//// ========================================================
-////
-////
-//// This is a script to find dvs value of a model given
-////	INPUT:
-////		dep lat lon
-////	OUTPUT:
-////		dvs or whatever the model stored
-////
-////	given a point dep lat lon, the following algorithm is implemented to 
-////	give back a dvs value
-////
-////	1.we find the lat lon range of this point
-////	index_lat_min index_lat_max index_lon_min index_lon_max 
-////	2. we define how far to look for vertically
-////		layer_thickness is the value to look for above and below to find all points that is 
-////		within range to average
-////	3. we do a weighted average for all points that is within range
-////	4. we calculated the average dvs and return it
-////
-////
-//// =========================================================
 
 double new_tomo::find_dvs_with_dep_lat_lon(double dep, double lat , double lon)
 {
@@ -508,28 +331,6 @@ double new_tomo::find_dvs_with_dep_lat_lon(double dep, double lat , double lon)
 
 	ave_return = this->my_cell[index_dep][index_lat_min][index_lon_min].dvs;
 	return ave_return;
-///*
-	//double min_value;
-	//min_value = this->my_cell[index_dep_min][index_lat_min][index_lon_min].dvs;
-	//double max_value;
-	//max_value = this->my_cell[index_dep_max][index_lat_min][index_lon_min].dvs;
-	//ave_return = ( min_value + max_value )/2;
-
-
-
-
-	 //DEBUG index 
-	//if(dep > 400)
-	//{
-	//cout << "dep lat lon "<< dep << "   " << lat<< "   " << lon << endl;
-	//cout<<setw(10)<<"index dep minmax lat minmax lon minmax  " 
-		//<< index_dep_min << "   "
-		//<< index_dep_max << "   "
-		//<< index_lat_min << "   "
-		//<< index_lat_max << "   "
-		//<< index_lon_min << "   "
-		//<< index_lon_max << endl;
-	//}
 
 
 	//2. we do a weighted average for all points that is winthin range
@@ -578,25 +379,8 @@ double new_tomo::find_dvs_with_dep_lat_lon(double dep, double lat , double lon)
 		if(dx > 1) dx = 1;
 		if(dx < 0) dx = 0;
 
-		// define the weight
-		// within 1 layer, weight = 1
-		// within 2 layer, weight = 0.6
-		// within 3 layer, weight = 0.4
-		// within 4 layer, weight = 0.2
-		//if(abs(index_dep - index) <= 1 )
-			//weight[index] = 1;
-		//else if(abs(index_dep - index) > 1 && abs(index_dep - index) <=2  )
-			//weight[index] = 0.6;
-		//else if(abs(index_dep - index) >2 && abs(index_dep - index) <= 3 )
-			//weight[index] = 0.4;
-		//else if(abs(index_dep - index) > 3 && abs(index_dep - index) <= 4 )
-			//weight[index] = 0.2;
-		//else 
-			//weight[index] = 0;
 		weight[index] = 1;
 
-		//cout << "index dep   " << index_dep << "index  "<< index << endl;
-		//cout << "weight is " << weight[index] << endl;
 		weight_SUM += weight[index];
 		layer_ave[index] = interp2_linear(ave_A, ave_B,ave_C,ave_D, dx, dy);
 		weight_ave_SUM += layer_ave[index];
@@ -608,20 +392,6 @@ double new_tomo::find_dvs_with_dep_lat_lon(double dep, double lat , double lon)
 	else
 		ave_return = weight_ave_SUM / weight_SUM;
 
-//*/
-
-
-	////if(abs(ave_return) > 25)
-	////{
-	//cout<< "find dvs weight ave sum / weight  sum" << weight_ave_SUM 
-		//<< "    " << setw(10) << weight_SUM 
-		//<< " ave return  :  " << setw(10)<< ave_return 
-		//<< " A  :  " << setw(10)<< ave_A
-		//<< " B  :  " << setw(10)<< ave_B
-		//<< " C  :  " << setw(10)<< ave_C
-		//<< " D  :  " << setw(10)<< ave_D
-		//<<  endl;
-	//}
 
 
 	return ave_return;
@@ -668,13 +438,6 @@ double new_tomo::find_hit_with_dep_lat_lon(double dep, double lat , double lon)
 	return ave_return;
 }
 
-//// ==================================================
-////
-//// Find the index of lat given a lat value
-////
-//// Here we give back the index that is close to target point
-////
-////===================================================
 int new_tomo::find_index_lat(double lat)
 {
 	int index_return;
@@ -714,13 +477,6 @@ int new_tomo::find_index_lat(double lat)
 
 
 
-//// ==================================================
-////
-//// Find the index of lon given a lon value
-////
-//// Here we give back the index that is close to target point
-////
-////===================================================
 int new_tomo::find_index_lon(double lon, int index_lat)
 {
 	int index_return;
@@ -802,18 +558,6 @@ int new_tomo::find_index_lon(double lon, int index_lat)
 
 
 
-//// ==================================================
-////
-//// Find the index of dep given a dep value
-////
-//// Here we give back the index that is close to target point
-////
-//// Given a dep, we find its top and bottom depth defined by layer_thickness
-////
-//// For both top and bottom depth , we find the depth range that each depth layer is
-//// in, and we choose the smaller number to be the index.
-////
-////===================================================
 int new_tomo::find_index_dep(double dep, int* index_min, int* index_max)
 {
 	double dep_min ;
@@ -883,22 +627,6 @@ int new_tomo::find_index_dep(double dep, int* index_min, int* index_max)
 
 
 
-/******************************************************************
- * This is a c script to find the index of depth 
- * given a single depth value
- * the returned index is the min value between the range of the depth
- * value
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:Aug 2016				Keywords:
- *	Reference:
-******************************************************************/
-
 
 
 int new_tomo::find_index_dep2(double dep)
@@ -956,18 +684,6 @@ int new_tomo::define_vertical_profile()
 
 
 
-/******************************************************************
- * This is a c script to read in $MODEL.INFILE file
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 
 int new_tomo::read_MODEL_INFILE()
@@ -1026,20 +742,6 @@ int new_tomo::read_MODEL_INFILE()
 }
 
 
-/******************************************************************
- * This is a c script to read in the actual tomography model file
- * NOTE:
- * 	the read in dvs is relative to PREM isotroic velocity in percentage
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 
 int new_tomo::read_tomography()
@@ -1082,9 +784,7 @@ int new_tomo::read_tomography()
 
 		// skip three more character
 		myfile >>  tmp1 >> tmp2 ;
-		//cout << tmp1 << tmp2 << endl;
 		myfile >>  tmp1 ;
-		//cout << tmp1  << endl;
 
 
 		// read in latitude 
@@ -1096,9 +796,7 @@ int new_tomo::read_tomography()
 		}
 		// skip three more character
 		myfile >>  tmp1 >> tmp2 ;
-		//cout << tmp1 << tmp2 << endl;
 		myfile >>  tmp1 ;
-		//cout << tmp1  << endl;
 
 
 		// read in longitude 
@@ -1111,9 +809,7 @@ int new_tomo::read_tomography()
 
 		// skip three more character
 		myfile >>  tmp1 >> tmp2 ;
-		//cout << tmp1 << tmp2 << endl;
 		myfile >>  tmp1 ;
-		//cout << tmp1  << endl;
 
 		// read in vs
 		int idep, ilat, ilon;
@@ -1332,8 +1028,6 @@ int new_tomo::read_tomography()
 			
 
 
-			//cout <<"dv type is "<< this->dv_type << endl;
-			//this->dvs[idep][ilat][ilon] = dvs;
 			this->my_cell[idep][ilat][ilon].dvs = dvs;
 
 			if(dvs != dvs )
@@ -1342,13 +1036,6 @@ int new_tomo::read_tomography()
 				cout << " V " << V << "PREM_V " << PREM_V << "dvs" << dvs << endl;
 			}
 
-			//if( this->dep[idep] == 2900)
-			//{
-				//cout << "depth " << this->dep[idep] <<"prem s is " << PREM_V << endl;
-				//cout << " V " << V << "PREM_V " << PREM_V << "dvs" << dvs << endl;
-				//cout << " dvs is  " <<  dvs << "V is " << V << endl;
-			//cout << " my cell dvs is " <<  this->my_cell[idep][ilat][ilon].dvs << endl;
-			//}
 		}
 
 	}
@@ -1396,30 +1083,6 @@ int new_tomo::construct_1D_reference()
 	myfile.close();
 	return 0;
 }
-
-
-
-
-
-
-/******************************************************************
- * This is a c script to read in INFILE file
- * INFILE contains information about:
- * 	directories
- * 	model parameterization
- * 	forward tomography iterations
- * 	plotting information
- * 	and other detailed algorithm parameter
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 
 int new_tomo::read_INFILE()
@@ -1583,9 +1246,6 @@ int new_tomo::read_INFILE()
 		}
 
 
-		//flag = "<tomo_layer_num>";
-		//if(sub1.compare(flag) == 0)
-			//this->tomo_layer_number = atoi(sub2.c_str()); 
 
 	}
 
@@ -1706,18 +1366,15 @@ int new_tomo::output_tomography_info()
 	cout << "Dimensions" << this->num_dep << this->num_lat << this->num_lon << endl;
 	for(idep = 0; idep < this->num_dep;idep++)
 	{	
-		//cout << "Output depth " << this->dep[idep] << endl;
 	for(ilat = 0; ilat < this->num_lat;ilat++)
 	for(ilon = 0; ilon < this->num_lon;ilon++)
 	{
 		//normalize
 		double xx,yy,zz;
 
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
 		double dep = this->dep[idep];
 		double lat = this->lat[ilat];
 		double lon = this->lon[ilon];
-		//double dvs = this->dvs[idep][ilat][ilon];
 		double dvs = this->my_cell[idep][ilat][ilon].dvs;
 		sph2cart(lat, lon, dep, &xx, &yy, &zz);
 		double RADIUS = 6371;
@@ -1725,9 +1382,7 @@ int new_tomo::output_tomography_info()
 		yy = yy/RADIUS;
 		zz = zz/RADIUS;
 
-	//cout  << xx << yy << zz << dvs << dep << lat << lon << endl;
 	myfile <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 
 	}
@@ -1742,20 +1397,6 @@ int new_tomo::output_tomography_info()
 
 
 
-/******************************************************************
- * This is a c script to output tomography model for new tomography
- * Here the lon is dependent on lat, therefore we use num_lon2 and lon2 
- * to get required lon
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 
 int new_tomo::output_tomography_info2()
@@ -1779,51 +1420,29 @@ int new_tomo::output_tomography_info2()
 	int idep,ilat,ilon;
 	cout << "Dimensions" << this->num_dep << this->num_lat << this->num_lon << endl;
 
-	//output lat lon parameterization
-	//for(ilat = 0; ilat < this->num_lat;ilat++)
-	//{
-		//cout<< "ilat is " << ilat << "current ilon is "<< this->num_lon2[ilat] << endl;
-	//for(ilon = 0; ilon < this->num_lon2[ilat];ilon++)
-	//{
-		//cout << "lat lon" << this->lat[ilat] << "  "<<  this->lon2[ilat][ilon] << endl;
-	//}
-	//}
 
 
 	for(idep = 0; idep < this->num_dep;idep++)
 	{	
-		//cout << "Output depth " << this->dep[idep] << endl;
 	for(ilat = 0; ilat < this->num_lat;ilat++)
 	for(ilon = 0; ilon <= this->num_lon2[ilat];ilon++)
-	//for(ilon = 0; ilon < this->num_lon;ilon++)
 	{
 		//normalize
 		double xx,yy,zz;
 
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
 		double dep = this->dep[idep];
 		double lat = this->lat[ilat];
 		double dvs;
 		double lon;
-			//lon = -180+ilon;
-		//if( ilon < this->num_lon2[ilat])
-		//{
-			lon = this->lon2[ilat][ilon];
-			dvs = this->my_cell[idep][ilat][ilon].dvs;
+		lon = this->lon2[ilat][ilon];
+		dvs = this->my_cell[idep][ilat][ilon].dvs;
 
 		if( ilon == this->num_lon2[ilat])
 		{
 			lon = 180;
 			dvs = this->my_cell[idep][ilat][0].dvs;
 		}
-		//}
-		//else 
-		//{
-			//lon = -180+ilon;
-			//dvs = 0;
-		//}
 
-		//if( dep >= 100 && dep <=300 && lat >= 0 && lat <= 2 && lon >= 0  && lon <=2 )
 		if( dep == 2800 )
 			double do_it;
 		else
@@ -1839,7 +1458,6 @@ int new_tomo::output_tomography_info2()
 		yy = yy/RADIUS;
 		zz = zz/RADIUS;
 
-	//cout  << xx << yy << zz << dvs << dep << lat << lon << endl;
 	int size = 15;
 	int prec = 6;
 	myfile <<fixed
@@ -1852,9 +1470,6 @@ int new_tomo::output_tomography_info2()
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
 		
-		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 
 	}
@@ -1896,37 +1511,15 @@ int new_tomo::output_starting_tomography()
 	{
 		//normalize
 		double xx,yy,zz;
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
-			//lon = -180+ilon;
-		//if( ilon < this->num_lon2[ilat])
-		//{
-			dep = this->dep[idep];
+		dep = this->dep[idep];
 
-//cout << " working on dep "<< dep << " lat " << lat << " lon "<< lon << endl; 
 		dvs = this->find_dvs_with_dep_lat_lon(dep,lat,lon);
-		//}
-		//else 
-		//{
-			//lon = -180+ilon;
-			//dvs = 0;
-		//}
-
-		//if( dep >= 100 && dep <=300 && lat >= 0 && lat <= 2 && lon >= 0  && lon <=2 )
-		//if( dep == 2800 )
-			//double do_it;
-		//else
-			//continue;
-
-
-
-		//double dvs = this->dvs[idep][ilat][ilon];
 		sph2cart(lat, lon, dep, &xx, &yy, &zz);
 		double RADIUS = 6371;
 		xx = xx/RADIUS;
 		yy = yy/RADIUS;
 		zz = zz/RADIUS;
 
-	//cout  << xx << yy << zz << dvs << dep << lat << lon << endl;
 	int size = 15;
 	int prec = 6;
 	myfile <<fixed
@@ -1938,8 +1531,6 @@ int new_tomo::output_starting_tomography()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -1950,24 +1541,6 @@ int new_tomo::output_starting_tomography()
 
 	return 0;
 }
-/******************************************************************
- * This is a c script to output tomography model for new tomography
- *	since our model lat lon is parametrized in a uniq way, after exploring 
- *	into vtk unstructured format, I feel the best way to plot the model is 
- *	to interpolate the new tomo into 1degree*1degree 
- *	and this is what happend in this function
- *
- * 	Here we implement a smoothing method, where for each cell
- * 	we average all dvs that is within some distance both vertically and horizontally
- *
- *	Input:
- *
- *	Output:
- *
- *
- *	DATE:	Aug 2016			Keywords:
- *	Reference:
-******************************************************************/
 #define smooth_horizontal_degree 	5
 #define smooth_vertical_layer		1
 void new_tomo::output_smoothed_tomography()
@@ -2069,7 +1642,6 @@ void new_tomo::output_smoothed_tomography()
 		ave_dvs = sum_dvs / num_dvs_total;
 
 
-		//double dvs = this->dvs[idep][ilat][ilon];
 		sph2cart(lat, lon, dep, &xx, &yy, &zz);
 		double RADIUS = 6371;
 		xx = xx/RADIUS;
@@ -2088,8 +1660,6 @@ void new_tomo::output_smoothed_tomography()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -2100,22 +1670,6 @@ void new_tomo::output_smoothed_tomography()
 
 }
 
-/******************************************************************
- * This is a c script to output tomography model for new tomography
- *	since our model lat lon is parametrized in a uniq way, after exploring 
- *	into vtk unstructured format, I feel the best way to plot the model is 
- *	to interpolate the new tomo into 1degree*1degree 
- *	
- *	and this is what happend in this function
- *
- *	Input:
- *
- *	Output:
- *
- *
- *	DATE:	Aug 2016			Keywords:
- *	Reference:
-******************************************************************/
 int new_tomo::output_tomography_info3()
 {
 
@@ -2145,37 +1699,15 @@ int new_tomo::output_tomography_info3()
 	{
 		//normalize
 		double xx,yy,zz;
-
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
-			//lon = -180+ilon;
-		//if( ilon < this->num_lon2[ilat])
-		//{
-			dep = this->dep[idep];
+		dep = this->dep[idep];
 
 		dvs = this->find_dvs_with_dep_lat_lon(dep,lat,lon);
-		//}
-		//else 
-		//{
-			//lon = -180+ilon;
-			//dvs = 0;
-		//}
-
-		//if( dep >= 100 && dep <=300 && lat >= 0 && lat <= 2 && lon >= 0  && lon <=2 )
-		//if( dep == 2800 )
-			//double do_it;
-		//else
-			//continue;
-
-
-
-		//double dvs = this->dvs[idep][ilat][ilon];
 		sph2cart(lat, lon, dep, &xx, &yy, &zz);
 		double RADIUS = 6371;
 		xx = xx/RADIUS;
 		yy = yy/RADIUS;
 		zz = zz/RADIUS;
 
-	//cout  << xx << yy << zz << dvs << dep << lat << lon << endl;
 	int size = 15;
 	int prec = 6;
 	myfile <<fixed
@@ -2187,8 +1719,6 @@ int new_tomo::output_tomography_info3()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -2200,18 +1730,6 @@ int new_tomo::output_tomography_info3()
 	return 0;
 }
 
-/******************************************************************
- * This is a c script to output tomography model for STD
- *	
- *
- *	Input:
- *
- *	Output:
- *
- *
- *	DATE:	Aug 2016			Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_STD_tomography()
 {
 
@@ -2240,14 +1758,8 @@ void new_tomo::output_STD_tomography()
 	for(lat = -89; lat <= 89 ; lat++ )
 	for(lon = -180 ; lon <=180 ; lon++)
 	{
-		//normalize
 		double xx,yy,zz;
-
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
-			//lon = -180+ilon;
-		//if( ilon < this->num_lon2[ilat])
-		//{
-			dep = this->dep[idep];
+		dep = this->dep[idep];
 
 
 		int index_lat_min;
@@ -2278,8 +1790,6 @@ void new_tomo::output_STD_tomography()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -2288,19 +1798,6 @@ void new_tomo::output_STD_tomography()
 	myfile.close();
 
 }
-/******************************************************************
- * This is a c script to output tomography model for delta tomography
- *  delta tomo = updated_tomo - old tomo
- *	
- *
- *	Input:
- *
- *	Output:
- *
- *
- *	DATE:	Aug 2016			Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_delta_tomography(new_tomo* my_tomo)
 {
 
@@ -2331,18 +1828,10 @@ void new_tomo::output_delta_tomography(new_tomo* my_tomo)
 	{
 		//normalize
 		double xx,yy,zz;
-
-		//void sph2cart(double lat, double lon, double dep, double* x, double* y, double* z)
-			//lon = -180+ilon;
-		//if( ilon < this->num_lon2[ilat])
-		//{
-			dep = this->dep[idep];
+		dep = this->dep[idep];
 
 		dvs_new = this->find_dvs_with_dep_lat_lon(dep,lat,lon);
 		dvs_old = my_tomo->find_dvs_with_dep_lat_lon(dep, lat, lon);
-
-
-		//double dvs = this->dvs[idep][ilat][ilon];
 		sph2cart(lat, lon, dep, &xx, &yy, &zz);
 		double RADIUS = 6371;
 		xx = xx/RADIUS;
@@ -2361,8 +1850,6 @@ void new_tomo::output_delta_tomography(new_tomo* my_tomo)
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -2371,19 +1858,6 @@ void new_tomo::output_delta_tomography(new_tomo* my_tomo)
 	myfile.close();
 
 }
-/******************************************************************
- * This is a c script to output the ray path info in line
- * path info for plot/paraview
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_record_path_line( big_new_record* my_big_record)
 {
 
@@ -2418,9 +1892,6 @@ void new_tomo::output_record_path_line( big_new_record* my_big_record)
 		y_dimension = 1;
 		z_dimension = 1;
 		int sum_points = x_dimension*y_dimension*z_dimension;
-		//myfile << x_dimension << endl;
-		//myfile << y_dimension << endl;
-		//myfile << z_dimension << endl;
 
 		flag = "# vtk DataFile Version 2.0";
 		myfile << flag << endl;
@@ -2477,19 +1948,6 @@ void new_tomo::output_record_path_line( big_new_record* my_big_record)
 
 
 }
-/******************************************************************
- * This is a c script to output the ray path info in line
- * path info for plot/paraview
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_record_path_line_in_one_file( big_new_record* my_big_record)
 {
 	cout <<"output big path file in a single file" << endl;
@@ -2515,7 +1973,6 @@ void new_tomo::output_record_path_line_in_one_file( big_new_record* my_big_recor
 
 	int delta_points_interp;			// we desample the path to make it easier to see
 	delta_points_interp = 10;
-	//cout << "station num is " << my_big_record->sta_num << endl;
 
 	for(ista = 0; ista < my_big_record->sta_num ; ista++)
 	{
@@ -2523,7 +1980,6 @@ void new_tomo::output_record_path_line_in_one_file( big_new_record* my_big_recor
 		int x_dimension, y_dimension, z_dimension;
 		x_dimension = my_big_record->my_record[ista].CP_num;
 		x_dimension = floor(x_dimension / delta_points_interp) +1;
-		//cout << "x_dimension is " << x_dimension << endl;
 		sum_data_points += x_dimension;
 		sum_line_number += x_dimension -1;
 		sum_line_points += 3*(x_dimension -1);
@@ -2627,19 +2083,6 @@ cout << "ista x_dimension " << ista <<"  "<<  x_dimension << endl;
 
 	myfile.close();
 }
-/******************************************************************
- * This is a c script to output cross section of EQ STA geometry
- * path info for plot/paraview
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_record_path_crosssection( big_new_record* my_big_record)
 {
 
@@ -2725,30 +2168,10 @@ void new_tomo::output_record_path_crosssection( big_new_record* my_big_record)
 
 }
 
-/******************************************************************
- * This is a c script to output timeinfo
- * 1. PREM time by taup_path given by eventinfo
- * 2. PREM time by code
- * 3. dt_PREM_taup_code
- * 4. observation time
- * 5. dt_obs_PREM_code = dt (T_obs - T_prem_code) = dt_obs_prem +PREM_taup - PREM_ code
- * 6. tomography correction for starting tomography
- * 7. dt_residual_after_tomo_correc = dt_obs_PREM_code - tomo_correction
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::output_time_info( big_new_record* my_big_record)
 {
 
 	string timeinfo_file;
-	//timeinfo_file = "timeinfo."+this->MODEL + ".iteration." +  to_string(this->current_iteration) + ".data";
 	timeinfo_file = my_big_record->timeinfo_outfile;
 	ofstream myfile;
 	myfile.open(timeinfo_file.c_str());
@@ -2788,19 +2211,6 @@ void new_tomo::output_time_info( big_new_record* my_big_record)
 }
 
 
-/******************************************************************
- * This is a c script to 
- * update for phase with bottoming depth < K km
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::S1_update(new_record* my_record)
 {
 	//cout << "===> Working on S1 update " << endl;
@@ -2820,8 +2230,6 @@ void new_tomo::S1_update(new_record* my_record)
 		this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
 		this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
 	}
-	//cout << "current layer min max "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max << endl;
-
 
 
 	// make sure that bottoming depth is out of range goes to bad, current_iteration_coeff = 0
@@ -2840,306 +2248,6 @@ void new_tomo::S1_update(new_record* my_record)
 	}
 
 }
-//void new_tomo::S2_update(big_new_record* my_big_record)
-//{
-	//cout << "===> Working on S2 update " << endl;
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-	//if(this->current_layer_num == 1 )
-	//{
-		//this->current_layer_dep_min = 0;
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	//else
-	//{
-		//this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	////cout << "current layer min max "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max << endl;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//cout << "working on sta "<< ista << endl;
-
-		//// make sure that bottoming depth is out of range goes to bad, current_iteration_coeff = 0
-		//double bottoming_depth = my_big_record->my_record[ista].turning_depth;
-		//if( bottoming_depth < this->current_layer_dep_min || bottoming_depth > this->current_layer_dep_max )
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-		
-
-		//// makesure lower most layer just update Dmin Dmax
-		//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-		//{
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//// modify the lowermost layer
-			//if(this->current_layer_dep_min == K && dep_tmp1 < K )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = 0;
-			//else if(this->current_layer_dep_min == K && dep_tmp1 > K )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-
-
-		//}
-	//}
-
-//}
-//void new_tomo::S3_update(big_new_record* my_big_record)
-//{
-	//cout << "===> Working on S3 update " << endl;
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-	//if(this->current_layer_num == 1 )
-	//{
-		//this->current_layer_dep_min = 0;
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	//else
-	//{
-		//this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	////cout << "current layer min max "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max << endl;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//cout << "working on sta "<< ista << endl;
-
-		//// make sure that bottoming depth is out of range goes to bad, current_iteration_coeff = 0
-		//double bottoming_depth = my_big_record->my_record[ista].turning_depth;
-		//if(  bottoming_depth > this->current_layer_dep_max && this->current_layer_dep_min != K)
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-		//else if (this->current_layer_dep_min == K && bottoming_depth < this->current_layer_dep_min )
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-		
-
-		//// makesure lower most layer just update Dmin Dmax
-		//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-		//{
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//// modify the lowermost layer
-			//if(this->current_layer_dep_min != K )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//else if(this->current_layer_dep_min == K && dep_tmp1 < K )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = 0 ;
-			//else if(this->current_layer_dep_min == K && dep_tmp1 > K )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-
-		//}
-	//}
-
-//}
-
-
-
-//void new_tomo::S4_update(big_new_record* my_big_record)
-//{
-	//cout << "===> Working on S4 update " << endl;
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-	//if(this->current_layer_num == 1 )
-	//{
-		//this->current_layer_dep_min = 0;
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	//else
-	//{
-		//this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	////cout << "current layer min max "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max << endl;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//cout << "working on sta "<< ista << endl;
-
-		//// make sure that bottoming depth is out of range goes to bad, current_iteration_coeff = 0
-		//double bottoming_depth = my_big_record->my_record[ista].turning_depth;
-		//if(  bottoming_depth > this->current_layer_dep_max || bottoming_depth < this->current_layer_dep_min )
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-		
-
-		//// makesure lower most layer just update Dmin Dmax
-		//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-		//{
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			////my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//// modify the lowermost layer
-			////if(this->current_layer_dep_min != K )
-			//if(  dep_tmp1> this->current_layer_dep_max || dep_tmp1 < this->current_layer_dep_min )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = 0 ;
-			//else 
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-
-		//}
-	//}
-
-//}
-
-//void new_tomo::S5_update(big_new_record* my_big_record)
-//{
-	//cout << "===> Working on S5 update " << endl;
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-	//if(this->current_layer_num == 1 )
-	//{
-		//this->current_layer_dep_min = 0;
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	//else
-	//{
-		//this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	////cout << "current layer min max "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max << endl;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//cout << "working on sta "<< ista << endl;
-
-		//// make sure that bottoming depth is out of range goes to bad, current_iteration_coeff = 0
-		//double bottoming_depth = my_big_record->my_record[ista].turning_depth;
-		//if(  bottoming_depth < K  && this->current_layer_dep_min != K)
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-		//else if(  bottoming_depth > K  && this->current_layer_dep_min == K)
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-
-		
-
-		//// makesure lower most layer just update Dmin Dmax
-		//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-		//{
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			//if(  dep_tmp1> this->current_layer_dep_max || dep_tmp1 < this->current_layer_dep_min )
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = 0 ;
-			//else 
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-
-		//}
-	//}
-
-//}
-
-//void new_tomo::S2_update(big_new_record* my_big_record)
-//{
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//if(my_big_record->my_record[ista].turning_depth >= K )
-		//{
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-			//// modify shallow RMS weight = 0
-			//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-			//{
-				//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-				//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-				//if( dep_tmp1 >= K )
-				//{
-					//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-					////cout << "dep "<< dep_tmp1 << "RMS weight "<< this->RMS_weight[dep_index_tmp1]  << endl;
-				//}
-				//else
-					//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = 0;
-
-			//}
-
-		//}
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-	//}
-
-//}
-//void new_tomo::S3_update(big_new_record* my_big_record)
-//{
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-		//if(my_big_record->my_record[ista].turning_depth >= K )
-		//{
-			//my_big_record->my_record[ista].current_iteration_coeff = 1;
-			//// modify shallow RMS weight = 0
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-			//{
-				//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//}
-
-		//}
-		//else 
-			//my_big_record->my_record[ista].current_iteration_coeff = 0;
-	//}
-
-//}
-
-//void new_tomo::S4_update(big_new_record* my_big_record)
-//{
-	//double K = 2200;
-
-	//int ista;
-	//int count;
-	//double dep_tmp1;
-	//int dep_index_tmp1;
-
-	//for(ista = 0; ista < my_big_record->sta_num; ista++)
-	//{
-
-			//// modify shallow RMS weight = 0
-			//dep_index_tmp1 = my_big_record->my_record[ista].CP_idep[count];
-			//dep_tmp1 = my_big_record->my_record[ista].CP_dep[count];
-			//for(count = 0; count < my_big_record->my_record[ista].CP_num  ; count ++)
-			//{
-					//my_big_record->my_record[ista].current_CP_weight[dep_index_tmp1] = this->RMS_weight[dep_index_tmp1] ;
-			//}
-	//}
-
-//}
 
 void new_tomo::calculate_turning_depth(new_record* my_record)
 {
@@ -3151,30 +2259,13 @@ void new_tomo::calculate_turning_depth(new_record* my_record)
 		my_record->turning_depth = 0;
 		for(count = 0; count < my_record->CP_num ; count++)
 		{
-			////max_dep = my_record->CP_dep[count];
-			//cout << "record CP_dep is "<< my_record->CP_dep[count] << endlg_record->my_record[ista].o;
-			
 			if(  my_record->CP_dep[count] > my_record->turning_depth )
 				my_record->turning_depth = my_record->CP_dep[count];
 		}
 
-		//cout << " ista "<< ista << "turning dep " << my_big_record->my_record[ista].turning_depth << endl;
-
 
 }
 
-/******************************************************************
- * This is a c script for forward tomography main function
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::forward_tomography_func(big_new_record* my_big_record)
 {
 
@@ -3211,166 +2302,6 @@ void new_tomo::forward_tomography_func(big_new_record* my_big_record)
 	}
 
 
-
-	//// ===================================================================
-	////
-	////	Processing S 1 3 2
-	////
-	//// ==================================================================
-
-	//if(flag.compare("S_1_3_2") == 0)
-	//{
-		//this->S1_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_M ; iteration ++)
-		//{
-			//cout <<"-- > working on layer M Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.upper_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-		//this->S3_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_MN ; iteration ++)
-		//{
-			//cout <<"-- > working on both MN Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.both_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-		//this->S2_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_N ; iteration ++)
-		//{
-			//cout <<"-- > working on layer N Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.lower_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-	//}
-
-	//// ===================================================================
-	////
-	////	Processing S 4 3 2
-	////
-	//// ==================================================================
-
-	//if(flag.compare("S_4_3_2") == 0)
-	//{
-		//this->S4_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_MN ; iteration ++)
-		//{
-			//cout <<"-- > working on layer both MN Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.both_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-		//this->S3_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_MN ; iteration ++)
-		//{
-			//cout <<"-- > working on both MN Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.both_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-		//this->S2_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_N ; iteration ++)
-		//{
-			//cout <<"-- > working on layer N Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.lower_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-	//}
-
-	//// ===================================================================
-	////
-	////	Processing S 3 2
-	////
-	//// ==================================================================
-
-	//if(flag.compare("S_3_2") == 0)
-	//{
-		//this->S3_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_MN ; iteration ++)
-		//{
-			//cout <<"-- > working on both MN Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.both_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-		//this->S2_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_N ; iteration ++)
-		//{
-			//cout <<"-- > working on layer N Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.lower_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-	//}
-
-	//// ===================================================================
-	////
-	////	Processing S 2
-	////
-	//// ==================================================================
-
-	//if(flag.compare("S_2") == 0)
-	//{
-		//this->S2_update(my_big_record);
-		//for(iteration = 1; iteration <= this->Iteration_N ; iteration ++)
-		//{
-			//cout <<"-- > working on layer N Iteration "<< iteration  << endl;
-			//this->forward_tomo_for_station(my_big_record);
-			//my_big_record->timeinfo_outfile = "timeinfo.lower_layer."+to_string(iteration)+".flag."+flag+".info" ;
-			//this->output_time_info(my_big_record);
-			//this->update_tomo_for_current_iteration();
-		//}
-	//}
-
-	//for(iteration = 1; iteration <= this->tomo_iterations; iteration ++)
-	//{
-		//this->current_layer_num = iteration;
-
-		//cout <<  " ======================================= " << endl;
-		//cout <<  " ======================================= " << endl;
-		//cout <<  " ======================================= " << endl;
-		//cout << "		---> Working on Iteration:   " << iteration << endl;
-		//this->current_iteration = iteration;
-
-		//for(layer_correction_num = 1; layer_correction_num <= this->tomo_layer_number ; layer_correction_num ++ )
-		//{
-			//this->current_layer_num = layer_correction_num;
-
-			////initiate for current run
-			//// do station 
-			//this->forward_tomo_for_station(my_big_record);
-
-		//}
-
-		//if(iteration == 1)
-		//{
-			//// output hit count/ coverage map
-			//this->output_coverage_hit_count();
-		//}
-
-
-		//// for each iteration, we output timeinfo to evaluate current iteration
-		//this->output_time_info(my_big_record);
-
-		//// update current tomography for this iteration
-		//this->update_tomo_for_current_iteration();
-
-	//}
-
-
-
-	// output record info
 
 
 }
@@ -3438,8 +2369,6 @@ void new_tomo::output_coverage_hit_count()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -3449,20 +2378,6 @@ void new_tomo::output_coverage_hit_count()
 
 }
 
-/******************************************************************
- * This is a c script to update tomography model for current iteration
- * and clean the accumulated value in my_cell:
- * sum_dvs and sum_num for each cell
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 void new_tomo::update_tomo_for_current_iteration()
 {
@@ -3483,9 +2398,6 @@ void new_tomo::update_tomo_for_current_iteration()
 				if( this->my_cell[idep][ilat][ilon].sum_num_in_cell <= 0 )
 					continue;
 
-				//if( this->my_cell[idep][ilat][ilon].sum_num_in_cell != this->my_cell[idep][ilat][ilon].sum_num_in_cell)
-					//cout << "ERROR this->my_cell[idep][ilat][ilon].sum_num_in_cell is NAN"<<endl;
-
 
 				old_dvs = this->my_cell[idep][ilat][ilon].dvs;
 				new_dvs = this->my_cell[idep][ilat][ilon].sum_dvs_in_cell / 
@@ -3496,9 +2408,6 @@ void new_tomo::update_tomo_for_current_iteration()
 
 				this->my_cell[idep][ilat][ilon].delta_dvs = delta_dvs;
 				this->my_cell[idep][ilat][ilon].dvs = new_dvs;
-
-				//if (new_dvs != new_dvs )
-					//cout << "ERROR new_dvs is NAN" << endl;
 
 				// initiate 
 				this->my_cell[idep][ilat][ilon].sum_dvs_in_cell = 0;
@@ -3538,52 +2447,6 @@ int new_tomo::forward_tomo_for_one_station(new_record* my_record)
 {
 
 	int count;
-	//double max_dep;
-	//max_dep = 0;
-	//// find turning depth for current record
-	//my_record->turning_depth = 0;
-	//for(count = 0; count < my_record->CP_num ; count++)
-	//{
-		//////max_dep = my_record->CP_dep[count];
-		////cout << "record CP_dep is "<< my_record->CP_dep[count] << endl;
-		
-		//if(  my_record->CP_dep[count] > my_record->turning_depth )
-			//my_record->turning_depth = my_record->CP_dep[count];
-	//}
-	
-
-
-	// decide whether this record goes into current layer correction
-	//if(this->current_layer_num == 1 )
-	//{
-		//this->current_layer_dep_min = 0;
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-	//else
-	//{
-		//this->current_layer_dep_min = this->tomo_layer_array[this->current_layer_num-2];
-		//this->current_layer_dep_max = this->tomo_layer_array[this->current_layer_num-1];
-	//}
-
-	//cout << "current bottoming depth is " << my_record->turning_depth << endl;
-	//cout << "current layer min max is "<<  current_layer_dep_min
-		//<< "   " << current_layer_dep_max << endl;
-
-
-	//if( my_record->turning_depth >= this->current_layer_dep_min 
-			//&& my_record->turning_depth <= this->current_layer_dep_max )
-	//{
-		//double we_continue_to_work_on_this_record;
-		//we_continue_to_work_on_this_record = 0;
-	//}
-	//else
-	//{
-		//return 0;
-	//}	
-
-	//cout << "working on tomo for one sta for record " << my_record->STA << endl;
-
-
 
 	// initiate current record CP memory
 	cout << " ============== initiate CP"<< endl;
@@ -3603,12 +2466,6 @@ int new_tomo::forward_tomo_for_one_station(new_record* my_record)
 	string flag = this->Iteration_Scheme;
 		if(flag.compare("S_1") == 0)
 			this->S1_update(my_record);
-		//else if(flag.compare("S_2") == 0)
-			//this->S2_update(my_big_record);
-		//else if(flag.compare("S_3") == 0)
-			//this->S3_update(my_big_record);
-		//else if(flag.compare("S_4") == 0)
-			//this->S4_update(my_big_record);
 
 	// decide if current record will update current layer
 	// if current_iteration_coeff = 0 we skip
@@ -3641,26 +2498,6 @@ int new_tomo::forward_tomo_for_one_station(new_record* my_record)
 
 
 
-/******************************************************************
- * This is a c script to distribute the dt residual 
- * dt_residual = dt(obs - PREM) - dt(tomo - PREM)
- *
- * to each cell along its path and convert the dt residual 
- * in each cell into dvs value
- *
- * and then the dvs value is accumulated into my_cell.sum_dvs
- * and my_cell.sum_num ++
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
-
 
 int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 {
@@ -3678,8 +2515,6 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 	double dl;
 	double V_PREM;
 	double dvs_old_tomo;
-	//double code_PREM_time;
-	//code_PREM_time = 0;
 
 
 	// Here we introduce the core algorithm of the code
@@ -3718,7 +2553,6 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 
 	if(SUM_RMS == 0 ) 
 		return 0;
-	//cout << "SUM RMS dl " << SUM_RMS <<  "  " << SUM_dl << endl;
 
 	for(count = 0; count < my_record->CP_num  ; count ++)
 	{
@@ -3731,7 +2565,6 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 		weight_cell[count] = weight_RMS[count] * weight_dl[count];
 		SUM_weight += weight_cell[count];
 
-		//cout << "count is "<< count << "all weight is "<< weight_cell[count] << "current RMS weight" << RMS_tmp << endl;
 
 	}
 	if(SUM_weight == 0)
@@ -3755,16 +2588,11 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 
 
 	path_num_flag = 0;
-	//cout << "my record CP_ num is "<< my_record->CP_num << endl;
 	idep_tmp = 0;
 	ilat_tmp = 0;
 	ilon_tmp = 0;
 	for(count = 0; count < my_record->CP_num; count++)
 	{
-		//cout << "==================" << endl;
-		//cout << "count is " << count << endl;
-		//cout << "path num flag is " << path_num_flag << endl;
-
 
 		dep_tmp1 = my_record->CP_dep[count];
 
@@ -3779,13 +2607,9 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 			ilat_tmp = ilat;
 			ilon_tmp = ilon;
 		}
-		//cout << "idep lat lon" << idep << "  " << ilat << " "  << ilon << endl;
-
-		//dt_for_cell = my_record->dt_residual_for_current_iteration * my_record->CP_weight[count];
 		dt_for_cell = my_record->dt_residual_for_current_iteration * weight_tmp[count];
 		if(weight_tmp[count] == 0 ) 
 		{
-			//cout <<"weight is 0 continue" << endl;
 			continue;
 		}
 
@@ -3794,32 +2618,16 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 		dvs_old_tomo = this->my_cell[idep][ilat][ilon].dvs;
 
 
-		//code_PREM_time += dl / ( V_PREM * (1+dvs_old_tomo / 100) );
-		//code_PREM_time += dl / ( V_PREM   );
-
 
 		// the dvs is calculated using the following equation
-		//dt_for_cell = 0;
 		dvs_new_tomo = dl / ( dl / (1+dvs_old_tomo /100 ) + V_PREM * dt_for_cell ) -1 ;
 		dvs_new_tomo = dvs_new_tomo * 100;
-//cout << "we find a dvs new here"<< dvs_new_tomo << endl;
 
 		if(dvs_new_tomo != dvs_new_tomo)
 		{
 			cout << dl << "  " << dvs_old_tomo <<"  "<< V_PREM <<"  " << dt_for_cell << " " << weight_tmp[count] << endl;
 			cout << "dl problem count is " << count<<endl;
 		}
-		//if( count == 0)
-		//{
-			//idep_tmp = idep;
-			//ilat_tmp = ilat;
-			//ilon_tmp = ilon;
-			//new_dvs_for_line_value[count] = dvs_new_tomo;
-			//new_dvs_for_line_num[count] = path_num_flag;
-			//continue;
-		//}
-		//else
-		//{
 			// only increase path_num_flag when cell index changes
 			if(idep_tmp == idep && ilat_tmp == ilat && ilon_tmp == ilon)
 			{
@@ -3828,31 +2636,14 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 			}
 			else
 			{
-		//cout << "count is " << count << endl;
-		//cout << "path num flag is " << path_num_flag << endl;
 				path_num_flag =  path_num_flag +1;
 				idep_tmp = idep;
 				ilat_tmp = ilat;
 				ilon_tmp = ilon;
 			}
-			//cout << "idep lat lon" << idep_tmp << "  " << ilat_tmp << " "  << ilon_tmp << endl;
 
-			//cout << "count is "<< count << endl;
-			//cout << "path num flag is "<< path_num_flag << endl;
 			new_dvs_for_line_value[count] = dvs_new_tomo;
 			new_dvs_for_line_num[count] = path_num_flag;
-		//}
-		//this->my_cell[idep][ilat][ilon].sum_dvs_in_cell += dvs_new_tomo;
-		//this->my_cell[idep][ilat][ilon].sum_num_in_cell += 1;
-
-		//cout << "dt for cell is " << dt_for_cell 
-			 ////<< "dl is "<< dl 
-			////<< "V prem is " << V_PREM 
-			////<< "dvs old tomo is " << dvs_old_tomo 
-			//<< " sum num is " << this->my_cell[idep][ilat][ilon].sum_num_in_cell
-			//<< "sum dvs is " << this->my_cell[idep][ilat][ilon].sum_dvs_in_cell
-			//<< " old tomo is " << dvs_old_tomo 
-			//<< "new tomo is  " << dvs_new_tomo << endl;
 	}
 
 
@@ -3875,15 +2666,11 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 
 			if(weight_tmp[count] == 0 ) 
 				continue;
-			//cout << "dep is "<< dep_tmp1 << "current layer minmax "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max <<endl;
 			idep = my_record->CP_idep[count];
 			ilat = my_record->CP_ilat[count];
 			ilon = my_record->CP_ilon[count];
-			//cout << "             new count is "<< count << endl;
 			if( new_dvs_for_line_num[count] == i_path_num_flag )
 			{
-			//cout << "new_dvs_for_line_num " << new_dvs_for_line_num[count] <<
-				//" i_path_num_flag " <<  i_path_num_flag << endl;
 				if (new_dvs_for_line_value[count]!=new_dvs_for_line_value[count])
 					cout << "ERROR new_dvs_for_line_value is NAN"<<endl;
 				sum_dvs_current_cell += new_dvs_for_line_value[count];
@@ -3891,13 +2678,11 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 				current_cell_count = count;
 			}
 		}
-		//cout << "ipath num flag "<< i_path_num_flag << endl;
 		
 
 		if(sum_num_current_cell == 0)
 		{
 			average_dvs_current_cell = 0;
-			//cout << "ERROR sum_num_current_cell is 0 !!! " << endl;
 			continue;
 		}
 		else
@@ -3910,7 +2695,6 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 			dep_tmp1 = my_record->CP_dep[count];
 			if(weight_tmp[count] == 0 ) 
 				continue;
-			//cout << "dep is "<< dep_tmp1 << "current layer minmax "<< this->current_layer_dep_min << "  " << this->current_layer_dep_max <<endl;
 			idep = my_record->CP_idep[count];
 			ilat = my_record->CP_ilat[count];
 			ilon = my_record->CP_ilon[count];
@@ -3935,9 +2719,6 @@ int new_tomo::distribute_dt_residual_and_convert_to_dvs(new_record* my_record)
 	}
 	
 
-	//my_record->code_PREM = code_PREM_time;
-	//cout << "code prem time is " << code_PREM_time << endl;
-//
 
 	return 0;
 
@@ -3993,12 +2774,6 @@ void new_tomo::output_vtk_format_model()
 				ilon_max = ilon+1;
 				if(ilon_max == this->num_lon2[ilat] )
 					ilon_max = 0;
-
-				//cout << " "
-					//<< "dep minmax " << idep_min << "  " << idep_max
-					//<< "lat_minmax " << ilat_min << "  " << ilat_max
-					//<< "lon minmax " << ilon_min << "  " << ilon_max
-					//<< endl;
 
 
 				index_tmp = 0;
@@ -4107,8 +2882,6 @@ void new_tomo::output_vtk_format_model()
 					myfile << index_tmp << "  ";
 				}
 					myfile << endl;
-				//this->my_cell[idep][ilat][ilon].vtk_index = index;
-				//index++;
 			}
 
 
@@ -4121,8 +2894,6 @@ void new_tomo::output_vtk_format_model()
 			{
 				int ttt = 12;
 				myfile << ttt  <<endl;
-				//this->my_cell[idep][ilat][ilon].vtk_index = index;
-				//index++;
 			}
 
 
@@ -4139,10 +2910,7 @@ void new_tomo::output_vtk_format_model()
 			{
 				double dvs;
 				dvs = this->my_cell[idep][ilat][ilon].dvs;
-				//cout << "dvs is "<< dvs << endl;
 				myfile << dvs <<endl;
-				//this->my_cell[idep][ilat][ilon].vtk_index = index;
-				//index++;
 			}
 
 
@@ -4177,16 +2945,6 @@ void new_tomo::output_vtk_format_model()
  *
  *	Output:
  *	3D model with x y z and gradient dep lat lon
- *
- *	Input:
- *
- *
- *
- *	Output:
- *
- *
- *	DATE:	Aug 2016			Keywords:
- *	Reference:
 ******************************************************************/
 
 #define GRADIENT_DEP_LAYER_DELTA 2
@@ -4320,7 +3078,6 @@ void new_tomo::output_gradient_tomography()
 
 
 
-	//cout  << xx << yy << zz << dvs << dep << lat << lon << endl;
 	int size = 15;
 	int prec = 6;
 	myfile <<fixed
@@ -4332,8 +3089,6 @@ void new_tomo::output_gradient_tomography()
 		<<setw(size)<<setprecision(prec) << lat
 		<<setw(size)<<setprecision(prec) << lon << endl;
 		
-		//<< "   " << yy << "   " << zz << "   " << dvs <<"   " <<dep <<"   "<< lat <<"   " << lon << endl;
-	//cout <<setw(10)<<setprecision(5) << xx << "   " << yy << "   " << zz << endl;
 
 	}
 	}
@@ -4343,24 +3098,6 @@ void new_tomo::output_gradient_tomography()
 }
 
 
-
-/******************************************************************
- * This is a c script to find the cross point
- * between two point A and B
- *
- * the corss point can be either dep/lat/lon cross point 
- * we search for all cross point and return the cross poin location (dep lat lon)
- * we assume there is only one cross point for each catagory, dep/lat/lon
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void new_tomo::pointA_pointB_find_cross_pointC(double dep1, double lat1, double lon1,
 		double dep2, double lat2, double lon2,
 		int index_dep1,int index_lat1, int index_lon1,
@@ -4368,20 +3105,6 @@ void new_tomo::pointA_pointB_find_cross_pointC(double dep1, double lat1, double 
 		double* mid_dep, double* mid_lat, double* mid_lon,
 		double* delta_angle_d1_d2, double* radius)
 {
-	//double dep1, dep2, dep3;
-	//double lat1, lat2, lat3;
-	//double lon1, lon2, lon3;
-	//int index_dep1,index_dep2;
-	//int index_lat1, index_lat2;
-	//int index_lon1, index_lon2;
-
-	//cout << " "
-		//<< " dep lat lon "<< dep1 << "  " << lat1 << "  " << lon1 
-		//<< " dep lat lon "<< dep2 << "  " << lat2 << "  " << lon2
-		//<< "index dep lat lon " << index_dep1 << " " << index_lat1 << "  " << index_lon1 
-		//<< "index dep lat lon " << index_dep2 << " " << index_lat2 << "  " << index_lon2
-		//<< endl;
-
 	//string flag;
 	// flag can be dep, lat, lon
 
@@ -4435,26 +3158,17 @@ void new_tomo::pointA_pointB_find_cross_pointC(double dep1, double lat1, double 
 	delta_lat_dist = sin(delta_lat /180*3.1415926)*(6371 - dep1);
 	delta_lon_dist = sin(delta_lon /180*3.1415926)*(6371 - dep2);
 	double delta_dist;
-	//delta_dist = sqrt( delta_lat_dist * delta_lat_dist + delta_lon_dist * delta_lon_dist);
-		//double dist_A_B(double A_lat, double A_lon, double B_lat, double B_lon) 
 	delta_dist = dist_A_B(lat1, lon1, lat2, lon2);
 	double mid_point_dist;
 	if(delta1 + delta2 == 0)
 		cout<< "ERROR delta1 + delta2 == 0!!" << endl;
 	mid_point_dist = delta_dist * ( delta2 / (delta1 + delta2) );
 
-	//cout << " delta dist is "<< delta_dist << endl;
-	//cout << " delta1 delta2 " << delta1 << "  " << delta2 << endl;
-	//cout << "  mid_point_dist " << mid_point_dist << endl;
 
 	double AZ;
 	AZ = az_A_B(lat1, lon1, lat2, lon2);
-	//cout << " AZ " << AZ << endl;
 	point_AZ_dist_point(lat1, lon1, AZ, mid_point_dist, mid_lat, mid_lon);
 	*mid_dep = dep1 + (dep2-dep1) * delta1/(delta1+delta2);
-	//double point_AZ_dist_point(double A_lat, double A_lon, double AZ, double dist, double* B_lat, double* B_lon)
-	//double az_A_B(double A_lat, double A_lon, double B_lat, double B_lon)
-//cout << "mid dep lat lon is "<< *mid_dep << " " << *mid_lat << " " << *mid_lon << endl;
 
 	
 	*delta_angle_d1_d2 = delta1 / (delta1 +delta2);
@@ -4512,8 +3226,6 @@ void new_tomo::output_cross_section_for_one_record(new_record* my_sta)
 	double ang_dist[MAX_NUM];
 	double dep[500];								// give a point every 30km
 
-// total 96 points first is 30km last is 2880km
-//printf("vertical slice between EQ STA distance %lf \n", dist_tmp);
 
 	int i,j;
 	ofstream myfile_gcp;
@@ -4569,12 +3281,6 @@ void new_tomo::output_cross_section_for_one_record(new_record* my_sta)
 
 			//find the dvs
 			double dvs_tmp;
-//printf("lat lon dep is %lf %lf %lf \n",lat_tmp, lon_tmp, dep_tmp);
-			
-			// hongyu 
-			// for cross-section, we can either output dvs or hit count
-			
-			// 
 
 			//dvs_tmp =  this->find_dvs_with_dep_lat_lon(dep_tmp, lat_tmp,lon_tmp);
 			dvs_tmp =  this->find_hit_with_dep_lat_lon(dep_tmp, lat_tmp,lon_tmp);
@@ -4611,143 +3317,6 @@ void new_tomo::output_cross_section_for_one_record(new_record* my_sta)
 
 }
 
-
-//// 
-////
-////
-//// output cross section of hit count 
-////
-//void new_tomo::output_cross_section_hit_count(big_new_record* my_big_record )
-//{
-	//int ista;
-
-	//for(ista = 0; ista < my_big_record->sta_num;ista++)
-	//{
-		//cout << "---> Output cross section for hit count  record num " << ista << " /"<< my_big_record->sta_num << endl;
-
-		//this->output_cross_section_for_one_record_hit_count( &my_big_record->my_record[ista]);
-	//}
-//}
-
-
-//void new_tomo::output_cross_section_for_one_record_hit_count(new_record* my_sta)
-//{
-	//double A_lat = my_sta->eq_lat;
-	//double A_lon = my_sta->eq_lon;
-	//double B_lat = my_sta->sta_lat;
-	//double B_lon = my_sta->sta_lon;
-	//double x,y,z;
-	//int depth_num = this->num_dep;
-
-	//int wid = 15;
-	//int pre = 3;
-
-
-	////get the mid point lat lon between two points
-	//double mid_lat, mid_lon;
-	//double dist_tmp = dist_A_B(A_lat, A_lon, B_lat, B_lon);
-	//double AZ;
-	//AZ = az_A_B(A_lat,  A_lon, B_lat, B_lon);
-	//point_AZ_dist_point(A_lat, A_lon, AZ, dist_tmp/2 , &mid_lat, &mid_lon);
-
-	//double grid_space = 1; 		//degree
-	
-	////dist is in km
-	//double dist_in_degree = dist_tmp/111;
-
-	//int npts_points = (int)(dist_in_degree/grid_space)+3;		// number of points between EQ and STA
-	//// we use cross-points to represent vertical slice
-	////int npts_points = (int)(dist_in_degree/grid_space)+3;		// number of points between EQ and STA
-	//int MAX_NUM = 10000;
-	//double lat[MAX_NUM];
-	//double lon[MAX_NUM];
-	//double ang_dist[MAX_NUM];
-	//double dep[500];								// give a point every 30km
-
-//// total 96 points first is 30km last is 2880km
-////printf("vertical slice between EQ STA distance %lf \n", dist_tmp);
-
-
-
-	//ofstream myfile_cross_section;
-	//string cross_file = "cross_section."+ my_sta->EQ + "."+ my_sta->STA + "." +my_sta->PHASE; 
-	//myfile_cross_section.open(cross_file.c_str());
-
-	//// output meta info for cross section file
-	//double theta_min, theta_max, radius_min, radius_max;
-	//theta_min = 0;
-	//theta_max = dist_in_degree;
-	//radius_min = 6371 - 2891;
-	//radius_max = 6371;
-	//myfile_cross_section << setw(20) << setprecision(3) ;
-	//myfile_cross_section << fixed
-		//<< theta_min  << "  "
-		//<< theta_max  <<  "  "
-		//<< radius_min  << "  "
-		//<< radius_max << "  "
-		//<< mid_lat << "  "
-		//<< mid_lon << "  "
-		//<< endl;
-
-	//// how far away in depth to print out a point
-	//double delta_depth = 50;
-
-	//for(count = 0; count < my_sta->CP_num; count++)
-	//{
-		//double dep_tmp1 = my_record->CP_dep[count];
-		//double r = 6371 - dep_tmp1;
-		//double theta = this-
-
-		//int idep = my_record->CP_idep[count];
-		//int ilat = my_record->CP_ilat[count];
-		//int ilon = my_record->CP_ilon[count];
-		
-		//hit_count = this->my_cell[idep][ilat][ilon].sum_num_in_cell;
-	//}
-
-	//for( i=0; i< npts_points; i++)
-		//for(j =0; j<depth_num; j++)
-		//{
-			//double lat_tmp = lat[i];
-			//double lon_tmp = lon[i];
-			//double dep_tmp = this->dep[j];
-			//double theta = ang_dist[i];
-			//double r = 6371 - dep_tmp;
-
-			////find the dvs
-			//double dvs_tmp;
-			//dvs_tmp =  this->find_dvs_with_dep_lat_lon(dep_tmp, lat_tmp,lon_tmp);
-			////dvs_tmp =  this->find_hit_with_dep_lat_lon(dep_tmp, lat_tmp,lon_tmp);
-
-			//myfile_cross_section << fixed;
-			//myfile_cross_section 
-				//<< setw(wid) << setprecision(pre) << theta
-				//<< setw(wid) << setprecision(pre) << r
-				//<< setw(wid) << setprecision(pre) << dvs_tmp
-				//<< endl;
-				
-		//}
-
-	//myfile_cross_section.close();
-
-
-//}
-
-/******************************************************************
- * This is a c script to write the tomography (my_tomo) to netcdf format
- *
- *	Input:
- *		new_tomography* 	my_tomo			
- *
- *
- *
- *	Output:
- *		char*				netcdf_file
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 
 int new_tomo::CONVERT_write_to_netcdf( char* netcdf_file)
 {

@@ -80,8 +80,6 @@ cout << "---> Read in CRUST 1.0 model" << endl;
 
 void CRUST_MODEL::get_single_station_correction(double lat, double lon, double* thickness, double* CRUST_TIME, double* PREM_TIME)
 {
-	//cout << "--> get_single_station_correction "<< endl;
-
 	// 1. find the lat lon index
 	// lat from -89.5 ~ 89.5 180 points
 	// lon -179.5 ~ 179.5 360 points
@@ -129,18 +127,14 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 
 	for(count = 0; count < CRUST_LINE_MAX ;count ++)
 	{
-		//cout << "--> work in line "<< count<<endl;
 		vs[count] = this->vs[count][current_index];
-		//cout<<"vs is "<< vs[count] << endl;
 		vp[count] = this->vp[count][current_index];
 		rho[count] = this->rho[count][current_index];
 		bd[count] = this->boundary[count][current_index];
-			//thickness_tmp[count] = fabs( bd[count]);
 		if(count == 0)
 			thickness_tmp[count] = 0;
 		else
 			thickness_tmp[count] = fabs(bd[count] - bd[count-1]);
-			//thickness_tmp[count] = fabs(bd[count+1] - bd[count]);
 	}
 
 
@@ -153,7 +147,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 		max_dep = dep_PREM;
 	else
 		max_dep = dep_CRUST;
-//cout << "max dep is "<< max_dep << endl;
 
 	// 3. integrate PREM time
 	// here we integrate over every 1km
@@ -168,7 +161,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 		*PREM_TIME += 1 / tmp_vs;
 	}
 
-//cout << " PREM crust time is "<< *PREM_TIME << endl;
 
 	// 4 integrate CRUST TIME
 	*CRUST_TIME = 0;
@@ -205,7 +197,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 	}
 
 
-//cout << " CRUST TIME IS "<< *CRUST_TIME << endl;
 
 	*thickness = fabs(bd[CRUST_LINE_MAX -2] - bd[0]);
 
@@ -290,7 +281,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 		max_dep = dep_PREM;
 	else
 		max_dep = dep_CRUST;
-//cout << "max dep is "<< max_dep << endl;
 
 	// 3. integrate PREM time
 	// here we integrate over every 1km
@@ -305,7 +295,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 		*PREM_TIME += 1 / tmp_vs;
 	}
 
-//cout << " PREM crust time is "<< *PREM_TIME << endl;
 
 	// 4 integrate CRUST TIME
 	*CRUST_TIME = 0;
@@ -342,7 +331,6 @@ cout << "index lat lon is current index"<< index_lat << " " << index_lon << " "<
 	}
 
 
-//cout << " CRUST TIME IS "<< *CRUST_TIME << endl;
 
 	*thickness =  fabs( bd[CRUST_LINE_MAX -2] - bd[0]);
 

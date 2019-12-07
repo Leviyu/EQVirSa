@@ -92,15 +92,6 @@ void virtual_station::get_grid_dist(const virtual_station& EQ_grid, const virtua
 	double grid_dist = dist_A_B(eq_lat ,eq_lon, sta_lat , sta_lon);
 	grid_dist = grid_dist/ 2 / 3.1415926 / 6371 * 360;
 	this->grid_dist = grid_dist;
-	//cout << eq_lat 
-		//<< " " << eq_lon
-		//<< " " << sta_lat 
-		//<< " " << sta_lon
-		//<< " " << grid_dist
-		//<< endl;
-
-	//cout << " --> get grid distance " << eq_lat << " "<< eq_lon << " "<<sta_lat << " "
-		//<< sta_lon << " distance is " << this->grid_dist << endl;
 }
 void virtual_station::get_grid_dist_final()
 {
@@ -124,8 +115,6 @@ void virtual_station::get_grid_dist_final()
 
 
 
-	//cout << " --> get grid distance " << eq_lat << " "<< eq_lon << " "<<sta_lat << " "
-		//<< sta_lon << " distance is " << this->grid_dist << endl;
 }
 
 
@@ -402,8 +391,6 @@ void virtual_station::get_traffic_time()
 		this->traffic_phase_list.push_back("sPP");
 	}
 
-	//cout << " current traffic vector size is " << this->traffic_phase_list.size() << endl;
-	//cout << this->traffic_phase_list.at(0)<< endl;
 
 	// 2. loop through each phase and calculate the travel time for each phase
 	//cout << " current VS traffic is / EQ name for vs is "<< this->EQ << endl;
@@ -430,18 +417,7 @@ void virtual_station::get_traffic_time()
 	for(auto i:this->traffic_phase_list)
 	{
 		command = "get_taup_time_ivs " + std::to_string(this->ivs) + " "+ i;
-		//command = "get_taup_time_2 " + this->my_big_record->PHASE + " "
-			//+ std::to_string(this->eq_lat) + " "
-			//+ std::to_string(this->eq_lon) + " " 
-			//+ std::to_string(this->eq_dep) + " "
-			//+ std::to_string(this->sta_lat) + " "
-			//+ std::to_string(this->sta_lon) + " "
-			//+ i;
-		//cout << "command is "<< command << endl;
-
 		double prem_traffic = atof(exec(command).c_str());
-		//cout << " phase "<< i << " time "<< prem_traffic << endl;
-		//cout <<" ==> Working on "<<  i << " time: "<< prem_traffic<< endl;
 		this->traffic_phase_time.push_back(prem_traffic);
 
 
@@ -493,7 +469,6 @@ void virtual_station::get_traffic_time()
 
 		// now lets check each traffic and if traffic is too close 
 		// then we make the quality of it -1
-		//cout << " mast minmax "<< this->MASK_MIN << " "<< this->MASK_MAX << endl;
 		if( prem_traffic > this->MASK_MIN and prem_traffic < this->MASK_MAX ) 
 		{
 			cout << "traffic phase "<< i<< " time "<< prem_traffic<< endl;
@@ -501,7 +476,6 @@ void virtual_station::get_traffic_time()
 		}
 
 	}
-	//cout << "traffic time size "<< this->traffic_phase_list.size() << endl;
 
 	
 
@@ -512,13 +486,9 @@ void virtual_station::get_traffic_time()
 }
 
 
-// This function first read in S_ES file 
-// and then t*(S_ES) to find the best fit to virtual stack
-// then find the best fit gaussian to t*(S_ES) and set ONSET on gaussian
 int virtual_station::find_stack_ONSET_time()
 {
 	cout << " find_stack_ONSET_time "<< endl;
-
 	// define traffic file for current virtual station
 	this->get_traffic_time();
 	
@@ -547,8 +517,6 @@ int virtual_station::find_stack_ONSET_time()
 	double X_TMP[LINE];
 	double S_ES[LINE];
 
-	//cout << " S_ES is "<< this->S_ES_file<< " file count is "<< LINE << endl;
-	//cout << " Stack SNR is " << this->stack_SNR << endl;
 
 	for(count = 0; count < LINE; count++)
 		myfile >> X_TMP[count] >> S_ES[count];
@@ -558,8 +526,6 @@ int virtual_station::find_stack_ONSET_time()
 	int max_loc = 0;
 	double amp = 0;
 	
-	//int npts_beg = (int) ( -15 / this->delta );
-	//int npts_end = (int) ( 23 / this->delta );
 	int npts_beg = 0;
 	int npts_end = (int)(this->LONG_LEN / this->delta);
 	
@@ -578,24 +544,6 @@ int virtual_station::find_stack_ONSET_time()
 	}
 	cout << " maxloc is  "<< max_loc << " amp is "<< amp << endl;
 
-	/*
-	// we use a smaller window to find the phase max loc
-	int long_zoom_beg_npts = (int) ( (fabs(this->LONG_BEG) - 20 ) / this->delta);
-	double long_zoom_len = 40;
-	int npts_long_zoom = long_zoom_len/this->delta;
-	double long_zoom[npts_long_zoom];
-	for(count = 0; count < npts_long_zoom ; count++ )
-	{
-		long_zoom[count] = this->long_win[ long_zoom_beg_npts + count];
-	}
-
-	amplitudeloc( long_zoom  , npts_long_zoom, & max_loc, &amp,1 );
-	if( max_loc > 50000 || max_loc < -50000 )
-		max_loc = 0;
-	if ( long_zoom_beg_npts  > 50000 || long_zoom_beg_npts < -50000 )
-		long_zoom_beg_npts = 0;
-	max_loc = max_loc + long_zoom_beg_npts;
-	*/
 
 	// cross-correlation phase_window with S_ES to find the proper location of
 	// phase window
@@ -648,45 +596,8 @@ int virtual_station::find_stack_ONSET_time()
 		this->amp_scale = 1;
 
 
-
-	
-	// cross-correlation phase_wind with S_ES to find best CCC match
-	// 1. construct main lobe with phase window
-	//int construct_array_with_main_lobe(double* array_in, int* npts_in, double* array_out)
-	////double tmp_phase_win[LINE];
-	//double tmp_phase_win[2000];
-	//construct_array_with_main_lobe(phase_win,&LINE,tmp_phase_win);
-	////double tmp_S_ES[LINE];
-	//double tmp_S_ES[2000];
-	//construct_array_with_main_lobe(S_ES,&LINE,tmp_S_ES);
-	//int CCC( double* x, int npts_x, double* y, int npts_y, int*shift, double* ccc, int flag)
-	// ccc between S_ES and phase_win to find best match
-	//int npts_shift = 0;
-	//double tmp_ccc = 0;
-	//CCC(tmp_S_ES,LINE,tmp_phase_win,LINE,&npts_shift , &tmp_ccc,1);
-	////CCC(tmp_S_ES,LINE,tmp_phase_win,LINE, &npts_shift, &tmp_ccc,1);
-	//CCC(S_ES,LINE,phase_win,LINE,&npts_shift,&tmp_ccc,1);
-	//cout << " sta index "<< this->my_big_record->my_vs_index 
-		//<<" npts shift is "<< npts_shift<<endl;
-
-	// shift phase window
-	//for(count = 0 ; count < LINE ; count++)
-	//{
-		//int npts_tmp = (int) (max_loc - LINE/2) + count + npts_shift;
-		//if(npts_tmp >= this->long_npts || npts_tmp < 0 )
-			//phase_win[count] = 0;
-		//else
-			//phase_win[count] = this->long_win[npts_tmp];
-	//}
-
-
-
 	double xx[LINE];
 	int vs_index = this->my_big_record->my_vs_index;
-	//string phase_win_file = "phase_win.vs."+std::to_string(vs_index);
-	//for(count = 0 ; count < LINE; count++)
-		//xx[count] = phase_start_time+  count  *this->delta;
-	//output_array2(phase_win_file,xx,&this->phase_win[0],LINE,0 );
 
 
 	// 2. t* S_ES to fit virtual stack
@@ -929,9 +840,6 @@ void virtual_station::update_SNR()
 		{
 			double dt = time - this->traffic_phase_time.at(j);
 
-			//cout << " traffic time is "<< dt << endl;
-			//cout << " MASK MIN " << this->MASK_MIN << endl;
-			//cout << " MASK MAX " << this->MASK_MAX + this->one_period << endl;
 
 
 			if( dt > this->MASK_MIN and dt < this->MASK_MAX + this->one_period )
@@ -954,9 +862,6 @@ void virtual_station::update_SNR()
 		noise = noise / noise_count;
 
 
-	//cout << "noise/sig count is "<< noise_count<< " "<< signal_count<< endl;
-	//cout << " signal "<< signal<< endl;
-	//cout << " noise "<< noise<< endl;
 
 	this->stack_SNR = signal / noise;
 	if( noise_peak == 0)
@@ -973,50 +878,6 @@ void virtual_station::update_SNR()
 
 void virtual_station::define_ONSET_ENDSET()
 {
-	//cout << " Define ONSET ENDSET" << endl;
-
-	/*
-	// onset is defined in phase window 
-	int npts_phase_win = (int)(this->WIN_LEN / this->delta);
-	int max_loc;
-	double amp;
-	//int amplitudeloc(double* array, int len, int* max_amp_loc, double* amplitude, int flag)
-	// normalize phase_win
-	//int normalize_array_with_flag(double* array, int len, int flag) 
-	amplitudeloc(&this->phase_win[0],npts_phase_win,&max_loc,&amp,1);
-	if( amp == amp and amp != 0 )
-		normalize_array_with_flag(&this->phase_win[0],npts_phase_win,1);
-	else if( amp == 0)
-	{
-		// make phase win all 1
-
-	}
-
-	//cout << " phase win max loc is "<< max_loc << " WIN_BEG is "<< this->WIN_BEG << " phase_win amp is "
-		//<<amp<< endl;
-	//double threshold = 0.2;
-	//int i = 0;
-	// Define ONSET
-	*/
-	/*
-	for(i = max_loc; i> 0 ; i--)
-	{
-		if( this->phase_win[i] < amp * threshold )
-		{
-			this->ONSET = this->WIN_BEG + i * this->delta;
-			break;
-		}
-	}
-	// Define ENDSET
-	for(i = max_loc; i<  npts_phase_win ; i++)
-	{
-		if( this->phase_win[i] < amp * threshold )
-		{
-			this->ENDSET = this->WIN_BEG + i * this->delta;
-			break;
-		}
-	}
-	*/
 	this->ONSET = this->virtual_stack_ONSET;
 	if(this->ONSET < this->WIN_BEG )
 		this->ONSET = this->WIN_BEG;
@@ -1025,18 +886,6 @@ void virtual_station::define_ONSET_ENDSET()
 	if(this->ENDSET >= this->WIN_BEG + this->WIN_LEN)
 		this->ENDSET = this->WIN_BEG + this->WIN_LEN;
 	
-	// check how long is ONSET-ENDSET window
-	// if onset or endse is more then 7seconds away from peak
-	// then we make onset 7 seconds 
-	//double peak_time = this->WIN_BEG + max_loc * this->delta;
-	//if( fabs(this->ONSET - peak_time ) > 10 )
-		//this->ONSET = peak_time - 10;
-	//if( fabs(this->ENDSET - peak_time ) > 10 )
-		//this->ENDSET = peak_time + 10;
-
-
-	//cout << "--> ONSET ENDSET "<< this->ONSET << " "<< this->ENDSET << endl; 
-
 	this->define_period_for_record();
 	this->find_SNR_PEAK_TROUGH();
 
@@ -1148,8 +997,6 @@ void virtual_station::calculate_VS_misfit(double* tstar_ES, double* phase_win, i
 	double amp_ES, amp_phase;
 	amplitudeloc(tstar_ES,npts,&max_loc_ES,&amp_ES,1);
 	amplitudeloc(phase_win,npts,&max_loc_phase,&amp_phase,1);
-	//cout << " max ES loc/amp "<< max_loc_ES << " " << amp_ES<< endl;
-	//cout << " max phase loc/amp "<< max_loc_phase << " " << amp_phase<< endl;
 	
 
 
@@ -1234,8 +1081,6 @@ void virtual_station::make_quality_decision()
 	// use SNR and CCC to deside if current record is good
 	double SNR_CUT = this->my_big_record->SNR_CUT;
 	double CCC_CUT = this->my_big_record->CCC_CUT;
-	//cout << " SNR is "<< this->stack_SNR << " ccc is "<< this->tstar_ccc << endl;
-	//cout << "CUT SNR is "<< SNR_CUT << " ccc is "<< CCC_CUT << endl;
 	if( this->stack_SNR > SNR_CUT &&
 			this->tstar_ccc > CCC_CUT )
 		this->quality_flag = 1;
@@ -1245,18 +1090,11 @@ void virtual_station::make_quality_decision()
 	if(this->misfit_pre > 0.3 )
 		this->quality_flag = 0;
 
-	// if averageSNR < 1 bad
-	//if( this->ave_SNR < 1 )
-		//this->quality_flag = 0;
-
 
 	// if misfit pre too big, quality -1
 	if( this->misfit_pre > 0.3)
 		this->quality_flag = -1;
 
-	// if tstar ccc too small, -1
-	//if( this->tstar_ccc < 0.92)
-		//this->quality_flag = -1;
 	if( this->stack_SNR_peak < 2 )
 		this->quality_flag = -1;
 	if( this->ave_SNR < 2)
@@ -1312,8 +1150,6 @@ void virtual_station::find_records_within_range()
 		double grid_lon = this->grid_lon;
 		double record_lat = this->my_big_record->my_record[ista].sta_lat;
 		double record_lon = this->my_big_record->my_record[ista].sta_lon;
-		//double eq_lat = this->my_big_record->my_record[ista].eq_lat;
-		//double eq_lon = this->my_big_record->my_record[ista].eq_lon;
 
 		// calculate the distance bewteen grid and record
 		double distance;
@@ -1372,9 +1208,6 @@ void virtual_station::stack_records_from_one_EQ()
 		tag = this->record_tag[ista];
 		if(tag == 0) 
 			continue;
-		//cout << "working on ista "<< ista << " eventStation index is "<< tag<< endl;
-		//cout << "tag "<< tag << endl;
-		//cout << " stacking for vs " << this->my_big_record->my_vs_index << " station index "<< tag << endl; 
 		sta_lon = this->my_big_record->my_record[tag].sta_lon;
 		sta_lat = this->my_big_record->my_record[tag].sta_lat;
 		if( this->my_big_record->my_record[tag].SNR == 1 )
@@ -1388,33 +1221,20 @@ void virtual_station::stack_records_from_one_EQ()
 		// if npts_record_sum > 10 then make it 1
 		// else make it 5
 		int gau_factor = 4;
-		//if( this->npts_record_sum > 10 )
-			//gau_factor = 1;
-		//else
-			//gau_factor = 5;
 
 
 		//gaussian_func(double a, double b, double c, double d, double x)
-		// dist is in degree
 		// checkout the link below for detailed info
 		// https://github.com/Leviyu/project_documentation/blob/master/01_gaussian/gaussian_shape.ipynb
 		weight = gaussian_func(1, 0, gau_factor , 0, dist);
-//cout << " stack station name "<< this->my_big_record->my_record[tag].STA << " stack weight is "<<
-	//weight<< " distance is "<< dist <<" gau factor is "<< gau_factor  <<  endl;
 		if (weight == 0)
 			continue;
 		int current_record_polar = this->my_big_record->my_record[tag].polarity_flag;
 		if( current_record_polar == 0)
 			current_record_polar = 1;
 
-		//cout << "working on ista "<< ista <<" weight :"<< weight<< " current_record_polar is "<<current_record_polar << endl;
-		//cout << " long nts "<< this->long_npts << endl;
 		for(npts = 0 ; npts < this->long_npts ; npts ++)
 		{
-			//cout << npts << " / "<< this->long_npts << endl;
-			//cout << this->my_big_record->my_record[tag].EQ << " " << 
-				//this->my_big_record->my_record[tag].STA << endl;
-			//cout <<  this->my_big_record->my_record[tag].long_win[npts] << endl;
 			if(  this->my_big_record->my_record[tag].long_win[npts] !=  
 					this->my_big_record->my_record[tag].long_win[npts] )
 				continue;
@@ -1442,7 +1262,7 @@ void virtual_station::stack_records_from_one_EQ()
 	// get current polarity for VS
 	string command = "get_polarity "+ this->EQ + " "+ std::to_string(this->sta_lat) + " "+
 		std::to_string(this->sta_lon) + " "+ this->PHASE;
-	//cout << " eq lat lon is "<< this->sta_lat << " "<< this->sta_lon << " phase "<< this->PHASE<<endl; 
+    cout << "command is "<< command << endl;
 	
 	double polarity = atof(exec(command).c_str());
 	this->polarity = polarity;
@@ -1456,7 +1276,6 @@ void virtual_station::mask_window_and_store_into_long_orig()
 	int MAX = 3100;
 
 	int npts_long = (int)( this->LONG_LEN / this->delta);
-	//cout << "my delta is "<< this->delta<< " npts long is "<< npts_long << endl;
 	this->long_win_orig.resize(MAX);
 	//return ;
 
@@ -1671,20 +1490,6 @@ void virtual_station::relocate_grid_center()
 }
 
 
-/******************************************************************
- * This is a c script to calculate the SNR 
- * 1. the average SNR for all stations winthin range
- * 2. the SNR of stacked record 
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
-******************************************************************/
 void virtual_station::get_SNR_before_and_after_stack()
 {
 
@@ -1739,7 +1544,6 @@ void virtual_station::get_SNR_before_and_after_stack()
 	npts_noise_len = (int) (this->noise_len  / this->delta);
 	npts_phase_len = (int) (this->phase_len  / this->delta);
 
-	//cout << " npts_noise_beg is "<< npts_noise_beg << " npts_noise_len is "<< npts_noise_len << endl;
 	for(count = 0; count < npts_noise_len ; count++)
 	{
 		noise_signal += fabs (  this->long_win_orig[npts_noise_beg + count] );
@@ -1750,7 +1554,6 @@ void virtual_station::get_SNR_before_and_after_stack()
 		phase_signal += fabs ( this->long_win_orig[npts_phase_beg + count] );
 	}
 
-//cout << " phase sig " << phase_signal << " noise signal "<< noise_signal << endl;
 	if( noise_signal == 0 || npts_noise_len == 0)
 	{
 		cout << "ERROR when calculateing SNR, noise signal is zero!" << endl;

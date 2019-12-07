@@ -87,17 +87,6 @@ void big_new_record::output_VS_info_for_one_VS(int vs_index)
 	ofstream out;
 	string eventout = "out.VS_eventStation_list."+this->PHASE+"."+to_string(ivs);
 	out.open(eventout.c_str());
-	/*
-	for(count = 0; count < my_vs.eventStation_index;count++)
-	{
-		int sta_index = my_vs.eventStation_index_array[count];
-		string long_file = "long_win."+my_record[sta_index].EQ+
-		"."+my_record[sta_index].STA+"."+this->PHASE;
-		double record_dist = my_record[sta_index].DIST;
-		double SNR = my_record[sta_index].SNR;
-		out<< long_file<<" "<< record_dist<< " "<< SNR <<endl;
-	}
-	*/
 	for(count = 0; count < my_vs.record_tag_index;count++)
 	{
 		int sta_index = my_vs.record_tag[count];
@@ -109,12 +98,9 @@ void big_new_record::output_VS_info_for_one_VS(int vs_index)
 	}
 	out.close();
 
-	//if( my_vs.ave_SNR == 1.0)
-		//return;
 
 	if( record_tag_index < this->eventStation_min_threshold)
 	{
-		//cout << " ivs "<< ivs << " is skipped cause record too small "<< record_tag_index << endl;
 		return;
 	}
 
@@ -164,8 +150,6 @@ void big_new_record::big_record_read_cross_point_file(new_tomo* my_tomo)
 	count = 0;
 	for(count = 0; count < this->sta_num; count++ )
 	{
-
-		//cout << "read cross file for "<< this->my_record[count].STA << endl;
 		this->my_record[count].read_cross_point_info( my_tomo);
 	}
 
@@ -296,11 +280,6 @@ void big_new_record::read_INFILE()
 		flag = "<INDEX_LOC>";
 		if(sub1.compare(flag) == 0)
 			this->INDEX_LOC= atoi(sub2.c_str());
-
-		//cout << " INDEX LOC is "<< this->INDEX_LOC
-			//<< " LAT EQ "<< this->LAT_EQ_LOC
-			//<<" LON EQ "<< this->LON_EQ_LOC
-			//<< endl;
 
 
 	}
@@ -510,16 +489,10 @@ void big_new_record::count_record_existance_for_grid_pair()
 			{
 				for(ilon_sta = 0; ilon_sta< this->grid_lon_num[ilat_sta]; ilon_sta++)
 				{
-					//cout << "EQ_GRID_LAT_LON/STA_GRID_LAT_LON: "<< ilat_eq << " "<< ilon_eq<<" "<< ilat_sta << " "<<ilon_sta<<  endl;
 
 					int cu_sta_num = this->my_grid[ilat_sta][ilon_sta].CU_STA_NUM;
-					//int ex_eq_num = this->my_grid[ilat_eq][ilon_eq].EX_EQ_NUM;
-					//int ex_sta_num = this->my_grid[ilat_sta][ilon_sta].EX_STA_NUM;
 					if( cu_sta_num < 3)
 						continue;
-
-					// cout << "EX eq sta num" << ex_eq_num << " " << ex_sta_num << endl;
-					//myfile << "EQ_GRID_LAT_LON/STA_GRID_LAT_LON: "<< ilat_eq << " "<< ilon_eq<<" "<< ilat_sta << " "<<ilon_sta<<  endl;
 
 					// IF eventinfo num > eventinfo_max_threshold, skip
 					int exist_eventinfo = 0;
@@ -530,18 +503,12 @@ void big_new_record::count_record_existance_for_grid_pair()
 							|| this->PHASE.compare("ScS") == 0
 							|| this->PHASE.compare("ScSScS") == 0)
 					this->count_eventinfo_existance_for_sing_grid_pair(ilat_eq,ilon_eq,ilat_sta,ilon_sta,&exist_eventinfo);
-					// this->my_grid[i]
-					// cout << "existed eventinfo "<< exist_eventinfo << endl;
-					// cout << " eventinfo threshold "<< this->eventinfo_max_threshold<< endl;
 					if(exist_eventinfo > this->eventinfo_max_threshold)
 						continue;
 					
 					// IF eventStation < eventStation_min_threshold, skip
-
 					int exist_eventStation = 0;
 					this->count_eventStation_existance_for_sing_grid_pair(ilat_eq,ilon_eq,ilat_sta,ilon_sta,&exist_eventStation);
-					//if( exist_eventStation < 10 || exist_eventStation > 25 ) 
-						//continue;
 					
 					if(exist_eventStation < this->eventStation_min_threshold)
 						continue;
@@ -617,33 +584,14 @@ void big_new_record::make_virtual_station_for_EQ(int ilat_eq, int ilon_eq, int i
 		int ista_eventStation = this->find_EQ_STA_PHASE_number_in_eventStation(EQ_NAME,STA_NAME);
 		if(ista_eventStation <= 0) 
 			continue;
-		//cout << " --> Work on "<< ista << " / " << sta_num << " eventStation index is "<< ista_eventStation << " total sta num  " << istack<<endl;
-		//cout << " EQ /STA we find "<< EQ_NAME << " "<< STA_NAME << endl;
-		//cout << " what we find "<< this->my_record[ista_eventStation].EQ << " "
-			//<< this->my_record[ista_eventStation].STA << endl;
-		//double grid_dist = this->my_vs[vs_index].grid_dist ;
 		double grid_lat = this->my_vs[vs_index].sta_lat ;
 		double grid_lon = this->my_vs[vs_index].sta_lon ;
-		//double eq_lat = this->my_vs[vs_index].eq_lat;
-		//double eq_lon = this->my_vs[vs_index].eq_lon;
-		//double eq_dep = this->my_vs[vs_index].eq_dep;
 		double sta_lat = this->my_record[ista_eventStation].sta_lat;
 		double sta_lon = this->my_record[ista_eventStation].sta_lon;
 		double dist = dist_A_B(grid_lat ,grid_lon, sta_lat , sta_lon);
-		//double dif = dist - grid_dist ;
-		//cout << " VS dist "<< grid_dist << " sta dist "<< dist <<" diff "<< dif << endl;
-			//this->my_record[ista_eventStation].sta_lon << endl;
-		//cout << " record - grid center distance "<< dist << endl;
 		// if current record is too far away from dist bin, we skip it
 		if( dist > 500 ) 
 			continue;
-		//cout << "grid sta lat lon "<< grid_lat << " "<< grid_lon << endl;
-		//cout << "record lat lon "<< sta_lat << " "<< sta_lon << endl;
-		//cout << " current distance is "<< dist << endl;
-
-
-
-
 		this->my_vs[vs_index].record_tag[istack] = ista_eventStation;
 		istack++;
 
@@ -697,10 +645,6 @@ int big_new_record::individual_VS_processing()
 	for(count = 0; count < this->my_vs[vs_index].record_tag_index; count ++)
 	{
 		station_index = this->my_vs[vs_index].record_tag[count];
-		//station_index = this->my_vs[vs_index].eventStation_index_array[count];
-		//cout << " eventStation index is  "<< station_index << " STA "<< 
-			//this->my_record[station_index].STA <<  endl;
-		//cout << this->my_record.size() << " " << station_index << endl;
 		if(  station_index <= 0 )
 		{
 			//cout << " skipped eventStation index is  "<< station_index << endl;
@@ -722,9 +666,6 @@ int big_new_record::individual_VS_processing()
 		this->my_record[station_index].calculate_SNR();
 		if( this->my_record[station_index].SNR == 1)
 			continue;
-		//tag_index = this->my_vs[vs_index].record_tag_index;
-		//this->my_vs[vs_index].record_tag[tag_index] = station_index;
-		//this->my_vs[vs_index].record_tag_index += 1;
 
 	}
 
@@ -830,16 +771,6 @@ void big_new_record::count_eventStation_existance_for_sing_grid_pair(int ilat_eq
 				string EQ_NAME = this->my_grid[ilat_eq][ilon_eq].CU_EQ_NAME[ieq];
 				string STA_NAME = this->my_grid[ilat_sta][ilon_sta].CU_STA_NAME[ista];
 				int num = this->find_EQ_STA_PHASE_number_in_eventStation(EQ_NAME,STA_NAME);
-
-				//double sta_lat = this->my_record[num].sta_lat;
-				//double sta_lon = this->my_record[num].sta_lon;
-				//double grid_lat = this->my
-
-
-				// int array_index = this->my_vs[this->my_vs_index].EQ_index;
-				// this->my_vs[this->my_vs_index].EQ_NAME_array[array_index] = EQ_NAME;
-				// array_index = this->my_vs[this->my_vs_index].eventStation_index;
-				// this->my_vs[this->my_vs_index].eventStation_index_array[array_index] = num;
 				if (num != 0)
 					*exist_eventStation += 1;
 			}
@@ -877,28 +808,6 @@ void big_new_record::count_eventinfo_existance_for_sing_grid_pair(int ilat_eq, i
 
 int big_new_record::find_EQ_STA_PHASE_number_in_eventinfo(string EQ_NAME, string STA, string PHASE)
 {
-	/*
-	int return_num = 0;
-	int count;
-	for(count = 0; count < this->existing_sta_num; count ++)
-	{
-		if(EQ_NAME.compare(this->existing_record[count].EQ) != 0)
-			continue;
-		if(STA.compare(this->existing_record[count].STA) != 0)
-			continue;
-		//cout << " find " << EQ_NAME << " "<< this->existing_record[count].EQ<< " index "<< 
-			//count << endl;
-		//cout << " find " << STA << " "<< this->existing_record[count].STA<< " index "<< 
-			//count << endl;
-		if(PHASE.compare(this->existing_record[count].PHASE) != 0)
-			continue;
-		return_num = count;
-		break;
-
-	}
-	//cout << " eventinfo return num is "<< return_num<<endl;
-	//return return_num;
-	*/
 
 	vector<new_record> tag;
 	tag.resize(1);
@@ -906,66 +815,22 @@ int big_new_record::find_EQ_STA_PHASE_number_in_eventinfo(string EQ_NAME, string
 	tag[0].STA = STA;
 	tag[0].PHASE = PHASE;
 	int binary_loc = 0;
-	//binary_loc = this->binary_find2(this->existing_record.begin(), this->existing_record.end(),tag[0]);
 	binary_loc = this->binary_find(this->existing_record.begin(), this->existing_record.end(),tag[0]);
-	/*
-if( return_num == 0)
-	return binary_loc;
-
-	cout << EQ_NAME << " "<< STA << " "<< PHASE << endl;
-	cout << " find eventinfo my code index: "<< return_num << " binary index: "<< binary_loc<<endl;
-	cout << " found info " << this->existing_record[binary_loc].EQ 
-		<< " " << this->existing_record[binary_loc].STA
-		<< " " << this->existing_record[binary_loc].PHASE << endl;
-	*/
 
 	return binary_loc;
 
 }
 int big_new_record::find_EQ_STA_PHASE_number_in_eventStation(string EQ_NAME, string STA)
 {
-	/*
-	int return_num = 0;
-	int count;
-	//cout << " EQ "<< EQ_NAME << "STA " << STA << endl;
-	for(count = 0; count < this->sta_num; count ++)
-	{
-
-		if(EQ_NAME.compare(this->my_record[count].EQ) != 0)
-			continue;
-		//cout << " ----> Searching "<< count << " / " << this->sta_num << endl;
-		if(STA.compare(this->my_record[count].STA) != 0)
-			continue;
-		 //cout << this->my_record[count].EQ << " sta "<< this->my_record[count].STA << endl;
-		return_num = count;
-		break;
-	}
-	*/
-	//
-	//cout << " my code return value is "<< return_num<< endl;
-	// try binary search
-	//new_record tag = new_record();
 	vector<new_record> tag;
 	tag.resize(1);
 	tag[0].EQ = EQ_NAME;
 	tag[0].STA = STA;
 	tag[0].PHASE = this->PHASE;
 
-	//this->binary_find(this->my_record.begin(), this->my_record.end(),tag[0]);
 	int binary_loc = 0;
 	binary_loc =  this->binary_find(this->my_record.begin(), this->my_record.end(),tag[0]) ;
-	//cout << " binary index is "<< binary_loc<< endl;
-
-	/*
-if( return_num == 0)
 	return binary_loc;
-	cout << " EQ STA "<< tag[0].EQ << tag[0].STA << endl;
-	cout << " my code index: "<< return_num <<  " binary index "<< binary_loc<< endl;
-	cout << " found info "<< this->my_record[binary_loc].EQ
-		<< " "<< this->my_record[binary_loc].STA << endl;
-*/
-	return binary_loc;
-	//return return_num;
 
 
 }
@@ -977,12 +842,10 @@ int big_new_record::binary_find(AAA begin, AAA end, new_record val)
     AAA i = std::lower_bound(begin, end, val);
 
     if (i == end || (*i) != val) {
-		//cout << "Not Found" << endl;
         return 0; // found
 	}
     else {
 
-		//cout << "Found" << endl;
         return i- begin; // not found
 	}
 	
@@ -1089,18 +952,6 @@ cout << "check for " << endl;
 	int return_value = 0;
 	ifstream myfile;
 
-/*
-			string command = " cat eventinfo.EQ.STA.PHASE |grep -w " + eq_name + " |grep -w  " + sta_name + " |wc -l > tmp.exist_num";
-			exec(command);
-			myfile.open("tmp.exist_num");
-			string input;
-			myfile >> input;
-
-			double exist_num = atof(input.c_str());
-			if( exist_num != 0)
-				return_value ++;
-			//cout << "exist num is " << exist_num << endl;
-*/
 
 			int irecord = 0;
 			for(irecord = 0; irecord < this->existing_sta_num; irecord++)
@@ -1111,17 +962,6 @@ cout << "check for " << endl;
 					{
 						eq_name = eq_grid->EX_EQ_NAME[ieq];
 						sta_name = sta_grid->EX_STA_NAME[ista];
-
-
-							//if( this->existing_record[irecord].EQ != eq_name  )
-								//continue;
-							//if( this->existing_record[irecord].STA != sta_name  )
-								//continue;
-							//if( this->PHASE != this->existing_record[irecord].PHASE )
-								//continue;
-			//
-								//return_value ++;
-								//break;
 					}
 			}
 
@@ -1356,9 +1196,6 @@ void big_new_record::catagorize_eventstation_to_VS()
 	string command;
 	command = " cat eventStation |awk '{print $19,$11,$12}'|sort|uniq |sort -u -k1,1 |awk '$1 > 1500 {print $0}' > list.unique_EQ";
 	exec(command);
-	// step2 get unique sta list
-	//command = " cat eventStation |grep -v PPP |awk '{print $1,$9,$10}'|sort -u -k1,1 > list.unique_STA";
-	//exec(command);
 
 
 	int EQ_MAX = 2000;
@@ -1452,10 +1289,8 @@ void big_new_record::catagorize_eventstation_to_VS()
 				double grid_lon = this->my_grid[ilat][ilon].grid_lon;
 				// distance between EQ and grid
 				double distance_km = dist_A_B( grid_lat, grid_lon, STA_LAT[count], STA_LON[count]);
-				//cout << distance_km << endl;
 				if( distance_km > 110*this->VS_STA_RADIUS_DEGREE )
 					continue;
-				//cout << " station "<< STA_LIST[count] << " is stored in and the distance is " << distance_km /111.1 << endl;
 
 				// add EQ info into current grid
 				int current_index = this->my_grid[ilat][ilon].CU_STA_NUM ;
@@ -1522,15 +1357,11 @@ void big_new_record::virtual_station_grid_initiate()
 		for(ilon = 0; ilon < this->grid_lon_num[ilat] ; ilon++)
 		{
 			double lon_inc_in_degree = 360.0/this->grid_lon_num[ilat];
-			//cout << " lon_inc_in_degree is "<<  lon_inc_in_degree << endl;
 			double current_lon = ilon * lon_inc_in_degree - 180;
-			//double current_lon = ilon * new_lon_inc- 180;
-			//cout << " lat lon "<< current_lat << " "<< current_lon<< endl;
 			my_grid[ilat][ilon].grid_lat = current_lat;
 			my_grid[ilat][ilon].grid_lon = current_lon;
 			myfile<< current_lat << " " << current_lon << " 90 "<< this->VS_EQ_RADIUS_DEGREE * 111*2 << " " <<this->VS_EQ_RADIUS_DEGREE * 111 *2<< endl;
 
-			//my_grid[ilat][ilon].grid_radius = this->VS_RADIUS_DEGREE;
 			// initiate EXisting EQ STA 
 			my_grid[ilat][ilon].EX_EQ_NUM = 0;
 			int MMM = 2000;
@@ -1595,11 +1426,7 @@ void big_new_record::read_record_file(new_record* my_record)
 	for(line = 0; line < this->sta_num ; line++)
 	{
 		getline(myfile,tmp);
-		//cout << "read record "<< line+1 << endl;
-		//cout << tmp << endl;
 		istringstream ss(tmp);
-		//cout << this->delta << " " << this->long_beg<< " "<< this->long_len << endl;
-
 		// get delta value here 
 		if(this->delta == this->delta && this->delta != 0)
 			my_record[line].delta = this->delta;
@@ -1804,14 +1631,6 @@ void big_new_record::read_eventStation()
 
 }
 
-/*************************************************************
-* This C function read in sac file for current station 
-* for a certain phase
-*	INPUT:
-*	
-*	Hongyu DATE: Sep 2016
-*	Key words: read in station file
-*************************************************************/
 void big_new_record::read_sac_file()
 {
 	int ista;
@@ -1823,13 +1642,6 @@ void big_new_record::read_sac_file()
 		this->my_record[ista].read_sac_file();
 	}
 }
-/*************************************************************
-* This C function calculate the SNR for each station
-* for a certain phase
-*	INPUT:
-*	
-*	Hongyu DATE: Sep 2016
-*************************************************************/
 void big_new_record::calculate_SNR()
 {
 	int ista;

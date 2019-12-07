@@ -3,11 +3,14 @@
 
 ## =======================================================================
 ## =======================================================================
+# https://github.com/Leviyu/EQVirSa
+
+
 # most frequently used parameters
 <CURRENT_DIR>			/mnt/data2/maligaro/EQVirSa
                         # absolute path of the EQVirSa Package
 
-<ID>                    test6
+<ID>                    test20
 <EXISTING_EVENTINFO>	eventinfo
                         # accepted record information, we use this file to search for existing event-station 
                         # geometry
@@ -16,10 +19,11 @@
                         # meta eventStation list that is used to search and stack virtual stations.
                         # you can customize this file by grabbing eventStation file from soduser
                         # under ~soduser/Merge.Mw6.50km/${EQ}
+                        # soduser eventStation.yyyymmdd... must be moved to eventStation
 
 
-<PHASE_LIST>			ScS3m
-                        # Phase name, major arc phase is named after Sn or ScSn
+<PHASE_LIST>			ScS3 S4
+                        # Phase name, major arc phase is named after Sn or ScSn, as below, with NO COMMAS
                         # currently support
                         # S, Sdiff, SS, SSm, S3, S3m, S4, S4m, S5, S5m, S6m
                         # ScS, ScSScS, ScS3, ScS3m, ScS4, ScS4m, ScS5, ScS5m
@@ -28,7 +32,7 @@
 
 ## =======================================================================
 ## =======================================================================
-
+# Time window dependent info
 <PHASE_LONG_WIN_BEG>	-150
                         # starting time window for plotting, relative to PREM
 <PHASE_LONG_WIN_LEN>	300
@@ -65,6 +69,10 @@
 
 <S_ES_DIR>				/mnt/data2/maligaro/EQVirSa/S_EW_DIR
                         # Empirical wavelet of S wave for events, this is mandatory
+                        # if this is a new event, user must copy EW to the above directory
+                        # in EQTime, e.g., EQTime/DATADIR/test_eg1_1/201907060319, grab the
+                        # file S_ES_third.out needs to be copied (if the EQ was updated, then
+                        # user must get that one from its location)
 
 ## Define virtual station network setup
 <VS_LATITUDE_INC>		7		

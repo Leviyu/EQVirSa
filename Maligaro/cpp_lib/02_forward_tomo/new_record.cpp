@@ -33,15 +33,6 @@ void new_record::get_incident()
  * 	The crustal correction time for each record is calculated by:
  * 	1. get the crustal thickness at current station location
  * 	2. For each 
- *
- *	Input:
- *
- *
- *	Output:
- *
- *
- *	DATE:				Keywords:
- *	Reference:
 ******************************************************************/
 
 void new_record::get_crustal_correction()
@@ -54,13 +45,11 @@ void new_record::get_crustal_correction()
 	double PREM_TIME;
 
 	cout << "lat lon "<< lat << " "<< lon << endl;
-	//this->my_crust->get_single_station_correction(lat , lon, &thickness , &CRUST_TIME, &PREM_TIME );
 	this->my_crust[0].get_single_station_correction(lat , lon, &thickness , &CRUST_TIME, &PREM_TIME );
 
 
 	this->crust_correction = PREM_TIME - CRUST_TIME  ;
 
-	//cout << " curst correction for "<< this->STA << " is "<< this->crust_correction << endl;
 
 }
 
@@ -76,12 +65,9 @@ void new_record::download_sac_file()
 	string NET 		= this->NET;
 	string sac_file1 = EQ+"."+NET+"."+STA+".BH"+COMP+".sac";
 	string sac_file2 = EQ+"."+NET+"."+STA+".HH"+COMP+".sac";
-	//string sod_sac1 = "/mnt/soduser/"+EQ+"/"+sac_file1;
-	//string sod_sac2 = "/mnt/soduser/"+EQ+"/"+sac_file2;
 	string sod_sac1 = "/mnt/soddisk/soduser/Merge.Mw6.50km/"+EQ+"/"+sac_file1;
 	string sod_sac2 = "/mnt/soddisk/soduser/Merge.Mw6.50km/"+EQ+"/"+sac_file2;
 	string sac_file = "";
-	// cout << sac_file1 << endl;
 
 
 	// if sac_file exist, we continue
@@ -125,19 +111,16 @@ void new_record::read_sac_file()
 	int count;
 	string long_win_name;
 	// allocation long win memory
-	//this->long_win = new double[MAX];
 	this->long_win.resize(MAX);
 
 
 	// 1. get PREM time for current record
 	double PREM;
-	//PREM = taup_time(this->eq_lat, this->eq_lon, this->eq_dep, this->sta_lat , this->sta_lon, this->PHASE);
 	string taup_command = "get_taup_time "+ this->EQ + " "+ this->STA + " "+ this->PHASE ;
 	PREM = atof(exec(taup_command).c_str());
 
 	
 
-	//cout << "taup time is " << PREM << endl;
 	if( PREM <= 0 )
 		cout << "ERROR PREM <= 0 EQ lat lon dep " <<  this->eq_lat 
 			<< "  " << this->eq_lon
@@ -153,7 +136,6 @@ void new_record::read_sac_file()
 	double delta =  this->delta;
 	int NUM = 100000;
 	int npts = (int) (LON_LEN / delta);
-	//double X[npts];
 	vector<double> X(npts,0);
 
 
@@ -168,7 +150,6 @@ void new_record::read_sac_file()
 
 	// get polarity 
 	this->get_polar_flag();
-	//cout << " polarity is " << this->polarity << endl;
 
 
 	double abs_beg;
@@ -203,26 +184,12 @@ void new_record::read_sac_file()
 
 
 
-	//cout << "sac file is "<< this->sac_file << endl;
-		//<< " absolute time "<< abs_beg 
-		//<< " length "<< length 
-		//<< "delta " << this->delta
-		//<< endl;
-
-
-	//this->convert_long_win_to_velocity();
 
 	// write xy window
 	for(count = 0; count < npts; count++)
 		X[count] = LON_BEG + count * delta;
 	//normalize this longwin
 	normalize_array(&this->long_win[0], npts);
-
-	// for wired condition, we mask out the record with 0.1 array
-	//if( this->long_win[0] != this->long_win[0] )
-		//for(count = 0; count < npts; count++)
-			//this->long_win[count] = 0.00000001;
-
 
 
 	vector<double> long_win_flipped(npts,0);
@@ -274,28 +241,15 @@ void new_record::get_polar_flag()
 	string command = "make_polar "+ EQ + " "+ STA + " "+ PHASE + " "+ COMP ;
 	double polar = 0;
 	polar = atof(exec(command).c_str());
-	//exec(command);
-
-	//ifstream myfile;
-	//myfile.open("./tmp.polar");
-	//myfile >> polar ;
-	//myfile.close();
 	
 	if( polar == 0)
 		polar = 1;
-
-
-
-	//cout << "current station flag is "<< polar << endl;
 	this->polarity = polar;
 
 	if(this->polarity > 0)
 		this->polarity_flag = 1;
 	else
 		this->polarity_flag = -1;
-
-
-	//cout << " polar is "<< this->polarity << endl;
 }
 
 
@@ -329,12 +283,6 @@ void new_record::calculate_SNR()
 	npts_phase_beg = (int) ( (this->phase_beg - this->long_beg ) / this->delta );
 	npts_noise_len = (int) (this->noise_len  / this->delta);
 	npts_phase_len = (int) (this->phase_len  / this->delta);
-	//cout << " npts_noise_beg" << npts_noise_beg 
-	 	//<< " npts_phase_beg"  << npts_phase_beg
-	 	//<< " npts_noise_len " << npts_noise_len
-	 	//<< " npts_phase_len "<< npts_phase_len
-	 	//<< endl;
-//
 	int count;
 	for(count = 0; count < npts_noise_len ; count++)
 	{
@@ -358,10 +306,6 @@ void new_record::calculate_SNR()
 	if(this->SNR != this->SNR )
 		this->SNR = 0.5;
 
-	//cout << " signal "<< phase_signal << " "<< npts_phase_len <<endl;
-	//cout << " noise "<< noise_signal<< " "<< npts_noise_len <<endl;
-	//cout << " STA "<< this->STA << " SNR " << this->SNR << endl;
-
 
 }
 
@@ -374,31 +318,8 @@ void new_record::read_cross_point_info(new_tomo* my_tomo)
 	this->cross_point_file = my_tomo->cross_point_dir + "/cross_point."
 		+this->EQ + "."+ this->STA+ "."+this->PHASE+"."+this->COMP;
 
-	// initiate CP info
-	//this->initiate_CP();
-
-	//cout << "cross point file is " << this->cross_point_file << endl;
-	//if(!is_file_exist(this->cross_point_file))
-	//{
-		// if cross point file does not exist, we produce it 
-		// 1. read in taup file
-		
-	//cout << "read in taup path" << endl;
-		this->read_taup_path_info(my_tomo->taup_path_dir);
-	//cout << "read in taup path DONE" << endl;
-
-		// 2. find cross-point
-		//3. find dl Vprem and output into cross point file
-		this->find_cross_points(my_tomo);
-
-
-		// free taup angle and radius
-
-		//cout << "file does not exist" << endl;
-	//}
-	
-
-		//cout << "cross point file is " << this->cross_point_file << "phase is " << this->PHASE<< endl;
+	this->read_taup_path_info(my_tomo->taup_path_dir);
+	this->find_cross_points(my_tomo);
 	// read in cross point file
 	ifstream myfile;
 	myfile.open(this->cross_point_file.c_str());
@@ -433,9 +354,7 @@ void new_record::read_cross_point_info(new_tomo* my_tomo)
 		// debug check for unread value
 		if(this->CP_v_PREM[count] == 0)
 		{
-			// 
 			// when this condition happen, we manually set the CP of this file
-			//
 			cout << "ERROR current file not read in cause v_prem is zero "<< this->cross_point_file << endl;
 			this->CP_num = 0;
 			this->code_PREM = 0;
@@ -464,33 +383,10 @@ void new_record::read_cross_point_info(new_tomo* my_tomo)
 
 }
 
-
-
-
-
-
-/******************************************************************
- *
- * 	 then we find the cross-point between taup_path and tomography-cell
- *		the cross-points are used as the new taup path points
- *
- *
- *		OUTPUT:
- *			for each record
- *			we find the number of path in each cell
- *			and the path length
- *
- *	the cell is charactered by the index of minimum lat lon dep of that cell
- *			
- *
- *	DATE: Aug 2016		Keywords: TC Model
- *	Reference:
-******************************************************************/
 void new_record::find_cross_points(new_tomo* my_tomo)
 {
 
 	//cout << "--> working on finding cross points " << endl;
-
 	// go through taup_path (0.05degree sampled)
 	// Decide whether we go to the next cell
 	// if index of dep lat lon does not change, the same cell
@@ -518,47 +414,18 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 		// find the lat lon of current point
 		waypoint(this->eq_lon , this->eq_lat, this->sta_lon,this->sta_lat, this->angle[count],&lon_tmp, &lat_tmp);
 
-		//cout << "count "<< count << " angle is "<< this->angle[count] << " lat lon is "<< lat_tmp << " lon " << lon_tmp << endl;
 
 		dep_tmp = 6371 - this->radius[count];
 
-		//cout << " =================== working  on radius "<< this->radius[count] << endl;
 
 		// check the location of current point
 		index_dep = my_tomo->find_index_dep2(dep_tmp);
 
-		//if( dep_tmp == 0)
-			//cout <<"dep == 0 index dep is "<< index_dep << endl;
 		index_lat = my_tomo->find_index_lat(lat_tmp);
 		index_lon = my_tomo->find_index_lon(lon_tmp, index_lat);
 		
-		//cout << " here 22" << endl;
-		//cout << index_dep << "       " << index_lat << "   " << index_lon << endl;
-		// store first and last point location
-		//if(count == 0 || count == this->taup_path_max_num -1) 
-		// hongyu
 		if(count <= this->taup_path_max_num  -1) 
 		{
-			//old_index_dep = index_dep;
-			//old_index_lat = index_lat;
-			//old_index_lon = index_lon;
-			//this->CP_lat[this->CP_num] = lat_tmp;
-			//this->CP_lon[this->CP_num] = lon_tmp;
-			//this->CP_dep[this->CP_num] = dep_tmp;
-
-			//this->CP_ilat[this->CP_num] = index_lat;
-			//this->CP_ilon[this->CP_num] = index_lon;
-			//this->CP_idep[this->CP_num] = index_dep;
-			//angle[this->CP_num] = this->angle[count];
-			//radius[this->CP_num] = this->radius[count];
-				////cout << "cp num is " << this->CP_num << endl;
-				////cout << " angle radius   " << angle[this->CP_num] << "  "<<  radius[this->CP_num] << endl;
-				////cout << "idep ilat ilon is "<< index_dep << endl;
-
-			//this->CP_num ++;
-		//}
-		//else
-		//{
 			// if stay in the same cell, continue
 			if(this->CP_num != 0 && ( index_dep != old_index_dep 
 					||  index_lat != old_index_lat
@@ -607,9 +474,6 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 				angle[this->CP_num] = this->angle[count];
 				radius[this->CP_num] = this->radius[count];
 
-				//cout << "cp num is " << this->CP_num << endl;
-				//cout << " angle radius   " << angle[this->CP_num] << "  "<<  radius[this->CP_num] << endl;
-				//cout << "idep ilat ilon is "<< index_dep << endl;
 				this->CP_num ++;
 			}
 			else
@@ -627,9 +491,6 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 				this->CP_idep[this->CP_num] = index_dep;
 				angle[this->CP_num] = this->angle[count];
 				radius[this->CP_num] = this->radius[count];
-					//cout << "cp num is " << this->CP_num << endl;
-					//cout << " angle radius   " << angle[this->CP_num] << "  "<<  radius[this->CP_num] << endl;
-					//cout << "idep ilat ilon is "<< index_dep << endl;
 
 				this->CP_num ++;
 
@@ -638,47 +499,12 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 
 			}
 		}
-		//cout << " working on count " << count << endl;
-
-		 //we add a new point whenever a bounce or relfection point is reached
-		 //we just add upper bounce points
-			//if( this->radius[count] > 6300)
-		 //cout << " radius is " << this->radius[count] << endl;
-		 // hongyu
-		//if( count > 3 && count < this->taup_path_max_num - 1 
-				//&& ( this->radius[count] - this->radius[count -1] ) *
-				   //( this->radius[count] - this->radius[count +1] ) >0  )
-		//{
-			////cout <<" ============== We found a bounce point here fucker! ============ " << endl;
-			//old_index_dep = index_dep;
-			//old_index_lat = index_lat;
-			//old_index_lon = index_lon;
-			//this->CP_lat[this->CP_num] = lat_tmp;
-			//this->CP_lon[this->CP_num] = lon_tmp;
-			//this->CP_dep[this->CP_num] = dep_tmp;
-
-			//this->CP_ilat[this->CP_num] = index_lat;
-			//this->CP_ilon[this->CP_num] = index_lon;
-			//this->CP_idep[this->CP_num] = index_dep;
-			//angle[this->CP_num] = this->angle[count];
-			//radius[this->CP_num] = this->radius[count];
-
-			//this->CP_num ++;
-		//}
 
 	}
-
-	//cout  <<  " here 4 " << endl;
-	//cout  <<  " cp num is  " << this->CP_num <<  endl;
-
-
-	//this->CP_num += 1;
 
 	// now update the dl info and V_prem info for current 
 	
 	// we have CP_num points and CP_num -1 cells
-	// Hongyu
-	// each CP represent the 
 	double delta_angle;
 	int dep_index_tmp1;
 	double RMS_tmp;
@@ -699,17 +525,8 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 		R1 = radius[count];
 		R2 = radius[count+1];
 		this->CP_dl[count] = sqrt( R1*R1 + R2*R2 - 2*R1*R2*cos(delta_angle) );
-		// the PREM velocity should be the velocity of the point that is 
-		// at the center of the current cell
-		// current we use the index_point as the velocity reference point
-		// this is subject to change
-		//idep = this->CP_idep[count];
-		//ilat = this->CP_ilat[count];
-		//ilon = this->CP_ilon[count];
 		double dep_haha;
-		//dep_haha =   this->CP_dep[count] ;
 		dep_haha =  ( this->CP_dep[count] + this->CP_dep[count+1] ) /2; 
-		//dep_haha = this->CP_dep[count] ;
 		if(dep_haha >= 2890 )
 			dep_haha = 2890;
 		prem_s(dep_haha, &PREM_tmp, 0 );
@@ -736,10 +553,8 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 		}
 	}
 
-	///cout  <<  " here 2 " << "SUM RMS "endl;
 	if(SUM_RMS == 0 || SUM_RMS != SUM_RMS )
 		cout << "ERROR SUM_RMS problem" << endl;
-
 
 	// normalize dl and RMS
 	double weight_RMS[this->CP_num];
@@ -770,12 +585,6 @@ void new_record::find_cross_points(new_tomo* my_tomo)
 	// output as cross-file info
 	ofstream myfile;
 	myfile.open(this->cross_point_file.c_str());
-	//if (myfile.is_open()){
-		//cout << "File is opened" << endl;
-	//}
-	//else{
-		//cout << "File is not opened" << endl;
-	//}
 	for(count = 0; count < this->CP_num -1; count++)
 	{
 		if( this->CP_dl[count] == 0 )
@@ -808,15 +617,9 @@ void new_record::read_taup_path_info(string taup_path_dir)
 	
 	double sampling_rate;
 	sampling_rate = 0.01;				// sample a point every 0.05 degree
-	//vector<double> angle(MAX);
-	//vector<double> radius(MAX);
 
 	this->taup_path_file = taup_path_dir + "/taup_path."+this->EQ+"."+this->STA+"."+this->PHASE
 		+"."+this->COMP;
-
-	//cout << "taup path file  read in " << this->taup_path_file << endl;
-	
-	//cout << " ttaup path file is " << this->taup_path_file << endl;
 
 	ifstream myfile;
 	myfile.open(this->taup_path_file.c_str());
@@ -843,50 +646,11 @@ void new_record::read_taup_path_info(string taup_path_dir)
 		//myfile >> radius[count];
 		myfile >> tmp1;
 		myfile >> tmp2;
-		//cout << this->angle[count] << "   "<< this->radius[count] << endl;
 		
 		old_angle = angle[count];
 	}
 
 	this->taup_path_max_num = line_max;
-	 //define new array
-	//int new_npts;
-	//double dt;
-	//new_npts = (int)(  (angle[line_max -1] - angle[0] ) / sampling_rate +1   );
-	//dt = (angle[line_max -1] - angle[0]) / (new_npts - 1);
-
-	//this->taup_path_max_num = new_npts;
-	//if(new_npts > MAX )
-		//cout << "ERROR new_npts is > MAX, need to allocate a larger array " << endl;
-	//for(count = 0 ; count < new_npts ; count ++)
-	//{
-		//this->angle[count] = angle[-1] + dt*count;
-	//}
-	//int flag = 1;	//inconsistantly sampled
-	//wiginterpd(angle, radius, line_max, this->angle, this->radius, new_npts, flag);
-
-
-	//tk::spline s;
-	//s.set_points(angle, radius);
-	//for(count = 0 ; count < new_npts; count++)
-	//{
-		//this->radius[count] = s(angle[count]);
-	//}
-
-
-
-
-	//cout << "the last point is "
-		//<< " angle " << angle[line_max-1]
-		//<< "radius "<< radius[line_max -1]
-		//<< "angle " << this->angle[new_npts -1]
-		//<< "radius "<< this->radius[new_npts -1] << endl;
-	//output_array2("test1",angle, radius, line_max, 1);
-	//output_array2("test2",this->angle, this->radius, new_npts, 1);
-	
-	//cout << "line max " << line_max << " new npts  " << new_npts << endl;
-	//cout << " benchmark angle2 radius2 linemax  "<< angle[2] <<"  " << radius[2] <<"  " << line_max << endl;
-	//cout << " benchmark angle2 radius2  "<< this->angle[2] <<"  " << this->radius[2] << endl;
 
 	myfile.close();
 
@@ -944,11 +708,6 @@ void new_record::calculate_tomo_correction(new_tomo* my_tomo)
 		if( this->CP_v_PREM[count] == 0)
 			cout << "idep ilat ilon  " << idep << "   " << ilat << "   " << ilon << endl;
 
-	//cout << "   "
-		//<< " V_prem is "<< this->CP_v_PREM[count]
-		//<< "  V_tomo is   " << velocity_tmp 
-		//<< " tomo T is   " << (this->CP_dl[count] /  velocity_tmp ) 
-		//<< " PREM T is   " << (this->CP_dl[count] / this->CP_v_PREM[count]) << endl;
 	}
 
 
@@ -1097,13 +856,6 @@ void new_record::get_ellip_corr()
 
 			}
 			myfile.close();
-
-		//cout <<  " "
-			//<< "sta " << this->STA
-			//<< " phase "<< PHASE 
-			//<< " dist " << this->DIST 
-			//<< " ellip_corr " << this->ellip_corr << endl;
-			
 
 	}
 
